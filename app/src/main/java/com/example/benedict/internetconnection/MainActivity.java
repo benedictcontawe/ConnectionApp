@@ -1,4 +1,4 @@
-package com.example.benedict.bluetootharduino;
+package com.example.benedict.internetconnection;
 
 import android.app.Activity;
 import android.net.ConnectivityManager;
