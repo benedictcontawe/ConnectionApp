@@ -1,6 +1,7 @@
 package com.example.benedict.internetconnection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -33,7 +34,7 @@ public class MainActivity extends Activity{
         boolean hasWifi = false;
         boolean hasMobileData = false;
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
 
         for (NetworkInfo info : networkInfos){
