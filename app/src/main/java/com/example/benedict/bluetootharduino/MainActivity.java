@@ -286,4 +286,9 @@ public class MainActivity extends Activity implements OnTouchListener,OnItemClic
             finish();
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
