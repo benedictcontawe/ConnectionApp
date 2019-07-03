@@ -44,6 +44,6 @@ public class MainActivity extends Activity{
                 if (info.isConnected())
                     hasMobileData = true;
         }
-        return hasMobileData||hasWifi;
+        return hasMobileData || hasWifi;
     }
 }
