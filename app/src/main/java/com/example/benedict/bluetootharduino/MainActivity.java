@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements OnTouchListener,OnItemClic
             //Show a message. that the device has no bluetooth adapter
             Toast.makeText(getApplicationContext(), "Bluetooth Device Not Available", Toast.LENGTH_LONG).show();
             //finish apk
-            finish();
+            EXIT();
         }
         else
         {
@@ -267,21 +267,23 @@ public class MainActivity extends Activity implements OnTouchListener,OnItemClic
                 EXIT();
             }
         })
-                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Action for "Cancel".
-                    }
-                });
+            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Action for "Cancel".
+            }
+        });
 
         final AlertDialog alert = dialog.create();
         alert.show();
     }
 
     private void EXIT() {
-        finish();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             finishAffinity();
+        }
+        else {
+            finish();
         }
     }
 }

@@ -11,7 +11,7 @@ import android.widget.ToggleButton;
 
 public class ArduinoActivity extends Activity implements OnClickListener{
     String MacAddress;
-    BTManager BTM;
+    BluetoothManager BTM;
     ToggleButton toggle_connect,toggle_Key;
     TextView TextViewConnectionStatus,TextViewMacAddress;
     boolean isConnected = false;
@@ -25,7 +25,7 @@ public class ArduinoActivity extends Activity implements OnClickListener{
     }
 
     private void init() {
-        BTM = new BTManager();
+        BTM = new BluetoothManager();
 
         toggle_connect = (ToggleButton)findViewById(R.id.toggle_connect);
         toggle_Key = (ToggleButton)findViewById(R.id.toggle_Key);

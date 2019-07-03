@@ -16,7 +16,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.util.Log;
 
-public class BTManager {
+public class BluetoothManager {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothDevice remoteDevice;
     private BluetoothSocket socket;
