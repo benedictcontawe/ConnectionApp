@@ -31,7 +31,9 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         imgMicrophone.setOnTouchListener(this);
 
+        //TODO: txtDuration - Duration must be counting when its on recording
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
+        //TODO: imgMicrophone - audio recording function
         //xxx.setTextColor(ContextCompat.getColor(this,R.color.grey))
         //xxx.setImageResource(R.drawable.ic_immediate_grey)
     }
