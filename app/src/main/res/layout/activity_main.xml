@@ -81,7 +81,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.95" />
     <!--endregion-->
-
+    <!--endregion-->
     <TextView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -113,10 +113,11 @@
         app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_30_half" />
 
     <ImageView
-        android:id="@+id/text_view_result_android_view_model"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/image_view_signal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:gravity="center"
+        app:srcCompat="@drawable/ic_microphone_signal"
         app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_30_half"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
