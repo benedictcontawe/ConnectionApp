@@ -1,4 +1,4 @@
-package com.example.benedict.bluetootharduino;
+package com.example.benedict.ConnectionApp;
 
 import org.junit.Test;
 
