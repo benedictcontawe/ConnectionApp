@@ -1,8 +1,11 @@
 package com.example.benedict.ConnectionApp;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+//import org.junit.Assert.assertEquals;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,8 +22,8 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.benedict.bluetootharduino", appContext.getPackageName());
+        assertEquals("com.example.benedict.connectionapp", appContext.getPackageName());
     }
 }
