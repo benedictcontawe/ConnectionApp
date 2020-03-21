@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
         //TODO: imgPlay - should play the recorded audio in the microphone
         //TODO: imgStop - should stop the recorded audio in the microphone
-        //TODO: imgRefresh - should go back to on record state
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -103,9 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     else if (view.getId() == imgPlay.getId()) {
                         Log.d("onTouch","imgPlay");
+                        playAudio();
                     }
                     else if (view.getId() == imgStop.getId()) {
                         Log.d("onTouch","imgStop");
+                        stopAudioVisibility();
                     }
                     return true;
                 }
@@ -138,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }, RECORD_AUDIO
             );
         }
+    }
+
+    protected boolean hasMicrophone() {
+        PackageManager pmanager = this.getPackageManager();
+        return pmanager.hasSystemFeature(
+                PackageManager.FEATURE_MICROPHONE);
     }
 
     private void startRecord() {
@@ -279,8 +286,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void setPlayVisibility() {
         imgRefresh.setVisibility(View.VISIBLE);
         imgMicrophone.setVisibility(View.INVISIBLE);
+        stopAudioVisibility();
+    }
+
+    private void stopAudioVisibility() {
         imgPlay.setVisibility(View.VISIBLE);
         imgStop.setVisibility(View.INVISIBLE);
+    }
+
+    private void playAudio() {
+        imgPlay.setVisibility(View.INVISIBLE);
+        imgStop.setVisibility(View.VISIBLE);
     }
 
     @Override
