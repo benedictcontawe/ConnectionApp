@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.d("TimerAsyncTask","onPreExecute");
+            Log.d("TimerAsyncTask","onPreExecute() Initialization");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         protected String doInBackground(Integer... integers) {
-            Log.d("TimerAsyncTask","doInBackground");
+            Log.d("TimerAsyncTask","doInBackground() background thread task");
 
             while (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_pressed).getConstantState()) {
                 publishProgress(counter);
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            Log.d("TimerAsyncTask","onProgressUpdate");
+            Log.d("TimerAsyncTask","onProgressUpdate for Main UI Thread");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onPostExecute(String string) {
             super.onPostExecute(string);
-            Log.d("TimerAsyncTask","onPostExecute");
+            Log.d("TimerAsyncTask","onPostExecute() after doInBackground()");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
