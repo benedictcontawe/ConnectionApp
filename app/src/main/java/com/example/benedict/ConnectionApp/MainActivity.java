@@ -1,8 +1,12 @@
 package com.example.benedict.ConnectionApp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,14 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
+    public static final int RECORD_AUDIO = 0;
+
+    private MediaRecorder mediaRecorder;
+
     private TextView txtDuration;
     private ImageView imgSignal,imgMicrophone;
+
     private Rect rect;
 
     @Override
@@ -27,8 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         init();
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
-        //TODO: imgMicrophone - audio recording function
-        //xxx.setImageResource(R.drawable.ic_immediate_grey)
     }
 
     private void init() {
@@ -37,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         imgMicrophone = (ImageView) findViewById(R.id.image_view_microphone);
 
         imgMicrophone.setOnTouchListener(this);
+
+        premitRecordAudio();
     }
 
     @Override
@@ -48,20 +59,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 // Write your code to perform an action on down
                 rect = new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom());
                 if (view.getId() == imgMicrophone.getId()) {
-                    Log.e("onTouch","ACTION_DOWN");
+                    Log.d("onTouch","ACTION_DOWN");
                     startRecord();
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
                 // Write your code to perform an action on continuous touch move
                 if (view.getId() == imgMicrophone.getId()) {
-                    Log.e("onTouch","ACTION_MOVE");
+                    Log.d("onTouch","ACTION_MOVE");
                     startRecord();
                 }
                 return true;
             case MotionEvent.ACTION_UP:
                 // Write your code to perform an action on touch up
-                Log.e("onTouch","ACTION_UP");
+                Log.d("onTouch","ACTION_UP");
                 resetRecord();
                 if (rect.contains(view.getLeft() + (int) x, view.getTop() + (int) y)) {
                     // User moved inside bounds
@@ -75,18 +86,86 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return false;
     }
 
+    private void premitRecordAudio() {
+        if (
+            ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, RECORD_AUDIO
+            );
+        }
+
+        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {
+                            Manifest.permission.RECORD_AUDIO,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    }, RECORD_AUDIO
+            );
+        }
+    }
+
     private void startAsyncTask() {
         TimerAsyncTask timerAsyncTask = new TimerAsyncTask(this);
         timerAsyncTask.execute(10);
     }
 
+    private void startMediaRecorder() {
+        mediaRecorder = new MediaRecorder();
+        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mediaRecorder.setOutputFile(getFilePath());
+        try {
+            mediaRecorder.prepare(); Log.d("startMediaRecorder", "prepare()");
+            mediaRecorder.start(); Log.d("startMediaRecorder", "start()");
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+            Log.e("startMediaRecorder", "Ilegal prepare() failed " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("startMediaRecorder", "IO prepare() failed " + e.getMessage());
+        }
+    }
+
+    private void stopMediaRecorder() {
+        if (mediaRecorder != null) {
+            mediaRecorder.stop();
+            mediaRecorder.release();
+            //mediaRecorder.reset();
+            mediaRecorder = null;
+        }
+    }
+
+    private String getFilePath() {
+        String filepath;
+        filepath = Environment.getExternalStorageDirectory().getPath();
+        //filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        filepath += "/MediaRecorderSample.3gp"; //AudioRecording.3gp
+
+
+        //File file = new File(filepath, "MediaRecorderSample.3gp");
+        //if (!file.exists()) file.mkdirs(); //Make a new Folder
+
+        Log.d("startMediaRecorder", "getFilePath() " + filepath);
+        return (filepath);
+    }
+
     private void startRecord() {
         if (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_normal).getConstantState()) {
             startAsyncTask();
+            startMediaRecorder();
         }
     }
 
     private void resetRecord() {
+        stopMediaRecorder();
         txtDuration.setText("00:00");
         txtDuration.setTextColor(ContextCompat.getColor(this,R.color.black));
         imgMicrophone.setImageResource(R.drawable.ic_microphone_normal);
@@ -103,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.e("TimerAsyncTask","onPreExecute");
+            Log.d("TimerAsyncTask","onPreExecute");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
@@ -116,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         @Override
         protected String doInBackground(Integer... integers) {
-            Log.e("TimerAsyncTask","doInBackground");
+            Log.d("TimerAsyncTask","doInBackground");
 
             while (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_pressed).getConstantState()) {
                 publishProgress(counter);
@@ -125,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     counter++;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    Log.e("TimerAsyncTask","Error " + e.getMessage());
                 }
             }
             return "Finished!";
@@ -133,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
-            Log.e("TimerAsyncTask","onProgressUpdate");
+            Log.d("TimerAsyncTask","onProgressUpdate");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
@@ -145,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         @Override
         protected void onPostExecute(String string) {
             super.onPostExecute(string);
-            Log.e("TimerAsyncTask","onPostExecute");
+            Log.d("TimerAsyncTask","onPostExecute");
             MainActivity activity = activityWeakReference.get();
             if (activity == null || activity.isFinishing()) {
                 return;
@@ -158,5 +238,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaRecorder.release();
     }
 }
