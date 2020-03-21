@@ -123,15 +123,51 @@
         app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_center" />
 
     <ImageView
+        android:id="@+id/image_view_refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_refresh_normal"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_51"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_10"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_start"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_95" />
+
+    <ImageView
+        android:id="@+id/image_view_stop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_stop_normal"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_51"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_start"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_end"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_95" />
+
+    <ImageView
+        android:id="@+id/image_view_play"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:srcCompat="@drawable/ic_play_arrow_normal"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_51"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_start"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_end"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_95" />
+
+    <ImageView
         android:id="@+id/image_view_microphone"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_microphone_normal"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_51"
         app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_start"
         app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_end"
-        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_95"
-        />
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_95" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
