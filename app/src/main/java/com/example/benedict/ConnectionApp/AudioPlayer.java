@@ -42,6 +42,7 @@ public class AudioPlayer {
     public static void release() {
         Log.d("AudioPlayer","release()");
         if (mediaPlayer != null) {
+            mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
         }

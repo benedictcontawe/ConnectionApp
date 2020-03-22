@@ -58,8 +58,8 @@ public class AudioRecorder {
     public static void release() {
         Log.d("AudioRecorder","release()");
         if (mediaRecorder != null) {
-            mediaRecorder.release();
             //mediaRecorder.reset();
+            mediaRecorder.release();
             mediaRecorder = null;
         }
     }
