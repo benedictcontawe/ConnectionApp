@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -17,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener ,MediaPlayer.OnCompletionListener{
 
     public static final int RECORD_AUDIO = 0;
 
@@ -35,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         permissionRecordAudio();
 
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
-        //TODO: AudioPlayer - after player done should display imgPlay instead of imgStop
         //TODO: permissionRecordAudio() - make the code clear
     }
 
@@ -85,21 +85,22 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             case MotionEvent.ACTION_UP:
                 // Write your code to perform an action on touch up
                 Log.d("onTouch","ACTION_UP");
-                resetRecord();
+                stopRecord();
                 if (rect.contains(view.getLeft() + (int) x, view.getTop() + (int) y)) {
                     // User moved inside bounds
                     if (view.getId() == imgMicrophone.getId()) {
-                        resetRecord();
+                        Log.d("onTouch","ACTION_UP imgMicrophone");
+                        stopRecord();
                     } else if (view.getId() == imgRefresh.getId()) {
-                        Log.d("onTouch","imgRefresh");
-                        setRecordVisibility();
+                        Log.d("onTouch","ACTION_UP imgRefresh");
+                        resetRecord();
                     }
                     else if (view.getId() == imgPlay.getId()) {
-                        Log.d("onTouch","imgPlay");
+                        Log.d("onTouch","ACTION_UP imgPlay");
                         playAudio();
                     }
                     else if (view.getId() == imgStop.getId()) {
-                        Log.d("onTouch","imgStop");
+                        Log.d("onTouch","ACTION_UP imgStop");
                         stopAudio();
                     }
                     return true;
@@ -109,10 +110,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return false;
     }
 
-//    @Override
-//    public void onCompletion(MediaPlayer mediaPlayer) {
-//        setPlayVisibility();
-//    }
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        stopAudio();
+    }
 
     private void permissionRecordAudio() {
         if (
@@ -145,8 +146,23 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                 PackageManager.FEATURE_MICROPHONE);
     }
 
+    private void startRecord() {
+        if (getMicrophoneImage() == isMicrphoneNormal()) {
+            AudioRecorder.start();
+            startTimerAsyncTask();
+        }
+    }
+
+    private void stopRecord() {
+        if (getMicrophoneImage() == isMicrphonePressed()) {
+            AudioRecorder.stop();
+            AudioRecorder.release();
+            resetRecordView();
+        }
+    }
+
     private void playAudio() {
-        AudioPlayer.start();
+        AudioPlayer.start(this);
         playAudioVisibility();
     }
 
@@ -156,23 +172,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         stopAudioVisibility();
     }
 
-    private void startRecord() {
-        if (getMicrophoneImage() == isMicrphoneNormal()) {
-            AudioRecorder.start();
-            startTimerAsyncTask();
-        }
-    }
-
     private void resetRecord() {
-        if (getMicrophoneImage() == isMicrphonePressed()) {
-            AudioRecorder.stop();
-            resetRecordView();
-        }
+        stopAudio();
+        setRecordVisibility();
     }
 
     private void startTimerAsyncTask() {
-        RecordTimerAsyncTask recordTimerAsyncTask = new RecordTimerAsyncTask(this);
-        recordTimerAsyncTask.execute(1);
+        RecordTimerAsyncTask.newInstance(this);
+        RecordTimerAsyncTask.execute();
     }
 
     private void resetRecordView() {
