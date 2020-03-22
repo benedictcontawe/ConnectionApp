@@ -152,14 +152,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private void startRecord() {
         if (getMicrophoneImage() == isMicrphoneNormal()) {
-            AudioRecorder.startMediaRecorder();
+            AudioRecorder.start();
             startTimerAsyncTask();
         }
     }
 
     private void resetRecord() {
         if (getMicrophoneImage() == isMicrphonePressed()) {
-            AudioRecorder.stopMediaRecorder();
+            AudioRecorder.stop();
             resetRecordView();
         }
     }

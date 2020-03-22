@@ -10,7 +10,8 @@ public class AudioRecorder {
 
     private static MediaRecorder mediaRecorder;
 
-    public static void startMediaRecorder() {
+    public static void start() {
+        Log.d("AudioRecorder","startMediaRecorder()");
         if (mediaRecorder == null) {
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //Use Android Microphone
@@ -20,20 +21,21 @@ public class AudioRecorder {
             mediaRecorder.setOutputFile(getFilePath()); //Output file for the Audio Record
             try {
                 mediaRecorder.prepare();
-                Log.d("startMediaRecorder", "prepare()");
+                Log.d("AudioRecorder", "prepare()");
                 mediaRecorder.start();
-                Log.d("startMediaRecorder", "start()");
+                Log.d("AudioRecorder", "start()");
             } catch (IllegalStateException e) {
                 e.printStackTrace();
-                Log.e("startMediaRecorder", "Ilegal prepare() failed " + e.getMessage());
+                Log.e("AudioRecorder", "Ilegal prepare() failed " + e.getMessage());
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e("startMediaRecorder", "IO prepare() failed " + e.getMessage());
+                Log.e("AudioRecorder", "IO prepare() failed " + e.getMessage());
             }
         }
     }
 
-    public static void stopMediaRecorder() {
+    public static void stop() {
+        Log.d("AudioRecorder","stopMediaRecorder()");
         if (mediaRecorder != null) {
             mediaRecorder.stop();
             mediaRecorder.release();
@@ -43,6 +45,7 @@ public class AudioRecorder {
     }
 
     public static String getFilePath() {
+        Log.d("AudioRecorder","getFilePath()");
         String filepath;
         filepath = Environment.getExternalStorageDirectory().getPath();
         //filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -52,11 +55,13 @@ public class AudioRecorder {
         //File file = new File(filepath, "MediaRecorderSample.3gp");
         //if (!file.exists()) file.mkdirs(); //Make a new Folder
 
-        Log.d("startMediaRecorder", "getFilePath() " + filepath);
+        Log.d("AudioRecorder", "getFilePath() " + filepath);
         return (filepath);
     }
 
     public static void release() {
+        Log.d("AudioRecorder","release()");
         mediaRecorder.release();
+        mediaRecorder = null;
     }
 }
