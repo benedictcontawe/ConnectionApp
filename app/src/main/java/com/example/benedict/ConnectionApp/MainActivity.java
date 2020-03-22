@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
         //TODO: AudioPlayer - after player done should display imgPlay instead of imgStop
-        //TODO: permissionRecordAudio() - ake the code clear
+        //TODO: permissionRecordAudio() - make the code clear
     }
 
     @SuppressLint("ClickableViewAccessibility")
