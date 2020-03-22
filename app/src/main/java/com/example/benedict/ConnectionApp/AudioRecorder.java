@@ -38,9 +38,6 @@ public class AudioRecorder {
         Log.d("AudioRecorder","stopMediaRecorder()");
         if (mediaRecorder != null) {
             mediaRecorder.stop();
-            mediaRecorder.release();
-            //mediaRecorder.reset();
-            mediaRecorder = null;
         }
     }
 
@@ -51,7 +48,6 @@ public class AudioRecorder {
         //filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
         filepath += "/MediaRecorderSample.3gp"; //AudioRecording.3gp
 
-
         //File file = new File(filepath, "MediaRecorderSample.3gp");
         //if (!file.exists()) file.mkdirs(); //Make a new Folder
 
@@ -61,7 +57,10 @@ public class AudioRecorder {
 
     public static void release() {
         Log.d("AudioRecorder","release()");
-        mediaRecorder.release();
-        mediaRecorder = null;
+        if (mediaRecorder != null) {
+            mediaRecorder.release();
+            //mediaRecorder.reset();
+            mediaRecorder = null;
+        }
     }
 }
