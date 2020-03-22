@@ -15,8 +15,8 @@ public class AudioRecorder {
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //Use Android Microphone
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); //.3gp
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); //For Low Quality
-            //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB); //For High Quality
+            //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); //For Low Quality
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB); //For High Quality
             mediaRecorder.setOutputFile(getFilePath()); //Output file for the Audio Record
             try {
                 mediaRecorder.prepare();
@@ -42,7 +42,7 @@ public class AudioRecorder {
         }
     }
 
-    private static String getFilePath() {
+    public static String getFilePath() {
         String filepath;
         filepath = Environment.getExternalStorageDirectory().getPath();
         //filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
