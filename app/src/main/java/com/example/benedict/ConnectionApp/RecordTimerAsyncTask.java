@@ -5,12 +5,13 @@ import android.util.Log;
 import android.widget.Toast;
 import java.lang.ref.WeakReference;
 
-class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
+public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
 
     private int counter;
     private WeakReference<MainActivity> activityWeakReference;
 
     RecordTimerAsyncTask(MainActivity activity) {
+        Log.d("TimerAsyncTask","Constructor");
         activityWeakReference = new WeakReference<MainActivity>(activity);
     }
 
