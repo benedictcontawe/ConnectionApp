@@ -3,12 +3,28 @@ package com.example.benedict.ConnectionApp;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
 import java.lang.ref.WeakReference;
 
 public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
 
     private int counter;
     private WeakReference<MainActivity> activityWeakReference;
+    private static RecordTimerAsyncTask recordTimerAsyncTask;
+
+    public static RecordTimerAsyncTask newInstance(MainActivity activity) {
+        Log.d("RecordTimerAsyncTask","newInstance()");
+        if (recordTimerAsyncTask == null) {
+            recordTimerAsyncTask = new RecordTimerAsyncTask(activity);
+        }
+
+        return recordTimerAsyncTask;
+    }
+
+    public static void execute() {
+        Log.d("RecordTimerAsyncTask","execute()");
+        recordTimerAsyncTask.execute(1);
+    }
 
     RecordTimerAsyncTask(MainActivity activity) {
         Log.d("RecordTimerAsyncTask","Constructor");
