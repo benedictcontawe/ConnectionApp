@@ -109,6 +109,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return false;
     }
 
+//    @Override
+//    public void onCompletion(MediaPlayer mediaPlayer) {
+//        setPlayVisibility();
+//    }
+
     private void permissionRecordAudio() {
         if (
             ActivityCompat.checkSelfPermission(
@@ -141,12 +146,13 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void playAudio() {
-        AudioPlayer.startMediaPlayer();
+        AudioPlayer.start();
         playAudioVisibility();
     }
 
     private void stopAudio() {
-        AudioPlayer.stopMediaPlayer();
+        AudioPlayer.stop();
+        AudioPlayer.release();
         stopAudioVisibility();
     }
 
@@ -251,5 +257,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onDestroy() {
         super.onDestroy();
         AudioRecorder.release();
+        AudioPlayer.release();
     }
 }
