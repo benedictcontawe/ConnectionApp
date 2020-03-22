@@ -14,10 +14,7 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
 
     public static RecordTimerAsyncTask newInstance(MainActivity activity) {
         Log.d("RecordTimerAsyncTask","newInstance()");
-        if (recordTimerAsyncTask == null) {
-            recordTimerAsyncTask = new RecordTimerAsyncTask(activity);
-        }
-
+        recordTimerAsyncTask = new RecordTimerAsyncTask(activity);
         return recordTimerAsyncTask;
     }
 
