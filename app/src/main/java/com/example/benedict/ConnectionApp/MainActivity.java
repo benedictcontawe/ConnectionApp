@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         init();
         ManifestPermission.newInstance(this);
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
-        //TODO: PlayTimerAsyncTask - When playing the AudioRecorder should see the duration
+        //TODO: PlayTimerAsyncTask - When playing the AudioPlayer should see the duration
     }
 
     @SuppressLint("ClickableViewAccessibility")
