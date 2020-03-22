@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener ,MediaPlayer.OnCompletionListener{
+public class MainActivity extends AppCompatActivity implements View.OnTouchListener, MediaPlayer.OnCompletionListener {
 
     private TextView txtDuration;
     private ImageView imgSignal,imgMicrophone, imgPlay, imgStop, imgRefresh;
