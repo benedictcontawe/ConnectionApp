@@ -1,13 +1,10 @@
 package com.example.benedict.ConnectionApp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,12 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener ,MediaPlayer.OnCompletionListener{
-
-    public static final int RECORD_AUDIO = 0;
 
     private TextView txtDuration;
     private ImageView imgSignal,imgMicrophone, imgPlay, imgStop, imgRefresh;
@@ -33,10 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
 
         init();
-        permissionRecordAudio();
-
+        ManifestPermission.newInstance(this);
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
-        //TODO: permissionRecordAudio() - make the code clear
         //TODO: PlayTimerAsyncTask - When playing the AudioRecorder should see the duration
     }
 
@@ -116,35 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         stopAudio();
     }
 
-    private void permissionRecordAudio() {
-        if (
-            ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(this,
-                    new String[] {
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, RECORD_AUDIO
-            );
-        }
-
-        if(!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            ActivityCompat.requestPermissions(this,
-                    new String[] {
-                            Manifest.permission.RECORD_AUDIO,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    }, RECORD_AUDIO
-            );
-        }
-    }
-
-    protected boolean hasMicrophone() {
-        PackageManager pmanager = this.getPackageManager();
-        return pmanager.hasSystemFeature(
-                PackageManager.FEATURE_MICROPHONE);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ManifestPermission.check();
     }
 
     private void startRecord() {
@@ -184,9 +151,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void resetRecordView() {
-        txtDuration.setText("00:00");
+        setTimerDurationText("00:00");
         setTimerDurationColour(false);
         setMicrophoneImage(false);
+    }
+
+    public void disableRecordView() {
+        setTimerDurationText("00:00 - No Microphone");
+        imgRefresh.setVisibility(View.INVISIBLE);
+        imgMicrophone.setVisibility(View.INVISIBLE);
+        imgPlay.setVisibility(View.INVISIBLE);
+        imgStop.setVisibility(View.INVISIBLE);
     }
 
     private void setRecordVisibility() {
@@ -212,6 +187,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         imgStop.setVisibility(View.VISIBLE);
     }
 
+    private Boolean isPlayVisible() {
+        return imgPlay.getVisibility() == View.VISIBLE;
+    }
+
+    private Boolean isStopVisible() {
+        return imgStop.getVisibility() == View.VISIBLE;
+    }
+
     public void setMicrophoneImage(Boolean isRecording) {
         if (isRecording) {
             imgMicrophone.setImageResource(R.drawable.ic_microphone_pressed);
@@ -234,14 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         return getResources().getDrawable(
                 R.drawable.ic_microphone_pressed
         ).getConstantState();
-    }
-
-    private Boolean isPlayVisible() {
-        return imgPlay.getVisibility() == View.VISIBLE;
-    }
-
-    private Boolean isStopVisible() {
-        return imgStop.getVisibility() == View.VISIBLE;
     }
 
     public void setTimerDurationText(String data) {
