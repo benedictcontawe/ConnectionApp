@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -18,13 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
     public static final int RECORD_AUDIO = 0;
-
-    private MediaRecorder mediaRecorder;
 
     private TextView txtDuration;
     private ImageView imgSignal,imgMicrophone, imgPlay, imgStop, imgRefresh;
@@ -149,61 +144,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void startRecord() {
         if (getMicrophoneImage() == isMicrphoneNormal()) {
             startAsyncTask();
-            startMediaRecorder();
+            AudioRecorder.startMediaRecorder();
         }
     }
 
     private void resetRecord() {
         if (getMicrophoneImage() == isMicrphonePressed()) {
-            stopMediaRecorder();
+            AudioRecorder.stopMediaRecorder();
             resetRecordState();
         }
-    }
-
-    private String getFilePath() {
-        String filepath;
-        filepath = Environment.getExternalStorageDirectory().getPath();
-        //filepath = Environment.getExternalStorageDirectory().getAbsolutePath();
-        filepath += "/MediaRecorderSample.3gp"; //AudioRecording.3gp
-
-
-        //File file = new File(filepath, "MediaRecorderSample.3gp");
-        //if (!file.exists()) file.mkdirs(); //Make a new Folder
-
-        Log.d("startMediaRecorder", "getFilePath() " + filepath);
-        return (filepath);
     }
 
     private void startAsyncTask() {
         RecordTimerAsyncTask recordTimerAsyncTask = new RecordTimerAsyncTask(this);
         recordTimerAsyncTask.execute(1);
-    }
-
-    private void startMediaRecorder() {
-        mediaRecorder = new MediaRecorder();
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        mediaRecorder.setOutputFile(getFilePath());
-        try {
-            mediaRecorder.prepare(); Log.d("startMediaRecorder", "prepare()");
-            mediaRecorder.start(); Log.d("startMediaRecorder", "start()");
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            Log.e("startMediaRecorder", "Ilegal prepare() failed " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("startMediaRecorder", "IO prepare() failed " + e.getMessage());
-        }
-    }
-
-    private void stopMediaRecorder() {
-        if (mediaRecorder != null) {
-            mediaRecorder.stop();
-            mediaRecorder.release();
-            //mediaRecorder.reset();
-            mediaRecorder = null;
-        }
     }
 
     private void resetRecordState() {
@@ -279,6 +233,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaRecorder.release();
+        AudioRecorder.release();
     }
 }
