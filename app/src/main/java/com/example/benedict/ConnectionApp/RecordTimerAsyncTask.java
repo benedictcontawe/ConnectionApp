@@ -18,14 +18,14 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
         return recordTimerAsyncTask;
     }
 
-    public static void execute() {
-        Log.d("RecordTimerAsyncTask","execute()");
-        recordTimerAsyncTask.execute(1);
-    }
-
     RecordTimerAsyncTask(MainActivity activity) {
         Log.d("RecordTimerAsyncTask","Constructor");
         activityWeakReference = new WeakReference<MainActivity>(activity);
+    }
+
+    public static void execute() {
+        Log.d("RecordTimerAsyncTask","execute()");
+        recordTimerAsyncTask.execute(1);
     }
 
     @Override
