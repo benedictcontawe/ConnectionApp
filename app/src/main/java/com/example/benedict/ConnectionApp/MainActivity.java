@@ -4,8 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.media.MediaRecorder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -13,13 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -102,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
                     }
                     else if (view.getId() == imgPlay.getId()) {
                         Log.d("onTouch","imgPlay");
-                        playAudio();
+                        playAudioVisibility();
                     }
                     else if (view.getId() == imgStop.getId()) {
                         Log.d("onTouch","imgStop");
@@ -148,14 +147,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void startRecord() {
-        if (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_normal).getConstantState()) {
+        if (getMicrophoneImage() == isMicrphoneNormal()) {
             startAsyncTask();
             startMediaRecorder();
         }
     }
 
     private void resetRecord() {
-        if (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_pressed).getConstantState()) {
+        if (getMicrophoneImage() == isMicrphonePressed()) {
             stopMediaRecorder();
             resetRecordState();
         }
@@ -207,73 +206,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
 
-    private class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
-        int counter;
-        private WeakReference<MainActivity> activityWeakReference;
-
-        RecordTimerAsyncTask(MainActivity activity) {
-            activityWeakReference = new WeakReference<MainActivity>(activity);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.d("TimerAsyncTask","onPreExecute() Initialization");
-            MainActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing()) {
-                return;
-            }
-            counter = 0;
-            imgMicrophone.setImageResource(R.drawable.ic_microphone_pressed);
-            txtDuration.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.green));
-        }
-
-        @Override
-        protected String doInBackground(Integer... integers) {
-            Log.d("TimerAsyncTask","doInBackground() background thread task");
-            while (imgMicrophone.getDrawable().getConstantState() == getResources().getDrawable( R.drawable.ic_microphone_pressed).getConstantState()) {
-                publishProgress(counter);
-                try {
-                    Thread.sleep(1000);
-                    counter++;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.e("TimerAsyncTask","Error " + e.getMessage());
-                }
-            }
-
-            return "Finished!";
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            Log.d("TimerAsyncTask","onProgressUpdate for Main UI Thread");
-            MainActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing()) {
-                return;
-            }
-
-            activity.txtDuration.setText(values[0].toString());
-        }
-
-        @Override
-        protected void onPostExecute(String string) {
-            super.onPostExecute(string);
-            Log.d("TimerAsyncTask","onPostExecute() after doInBackground()");
-            MainActivity activity = activityWeakReference.get();
-            if (activity == null || activity.isFinishing()) {
-                return;
-            }
-            setPlayVisibility();
-            Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void resetRecordState() {
         txtDuration.setText("00:00");
-        txtDuration.setTextColor(ContextCompat.getColor(this,R.color.black));
-        imgMicrophone.setImageResource(R.drawable.ic_microphone_normal);
+        setTimerDurationColour(false);
+        setMicrophoneImage(false);
     }
 
     private void setRecordVisibility() {
@@ -283,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         imgStop.setVisibility(View.INVISIBLE);
     }
 
-    private void setPlayVisibility() {
+    public void setPlayVisibility() {
         imgRefresh.setVisibility(View.VISIBLE);
         imgMicrophone.setVisibility(View.INVISIBLE);
         stopAudioVisibility();
@@ -294,9 +230,45 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         imgStop.setVisibility(View.INVISIBLE);
     }
 
-    private void playAudio() {
+    private void playAudioVisibility() {
         imgPlay.setVisibility(View.INVISIBLE);
         imgStop.setVisibility(View.VISIBLE);
+    }
+
+    public void setMicrophoneImage(Boolean isRecording) {
+        if (isRecording) {
+            imgMicrophone.setImageResource(R.drawable.ic_microphone_pressed);
+        } else {
+            imgMicrophone.setImageResource(R.drawable.ic_microphone_normal);
+        }
+    }
+
+    public Drawable.ConstantState getMicrophoneImage() {
+        return imgMicrophone.getDrawable().getConstantState();
+    }
+
+    public Drawable.ConstantState isMicrphoneNormal() {
+        return getResources().getDrawable(
+                R.drawable.ic_microphone_normal
+        ).getConstantState();
+    }
+
+    public Drawable.ConstantState isMicrphonePressed() {
+        return getResources().getDrawable(
+                R.drawable.ic_microphone_pressed
+        ).getConstantState();
+    }
+
+    public void setTimerDurationText(String data) {
+        txtDuration.setText(data);
+    }
+
+    public void setTimerDurationColour(Boolean isRecording) {
+        if (isRecording) {
+            txtDuration.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.green));
+        } else {
+            txtDuration.setTextColor(ContextCompat.getColor(this,R.color.black));
+        }
     }
 
     @Override
