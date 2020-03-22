@@ -30,7 +30,7 @@ public class BluetoothManager {
 
     public boolean BTAvailable() {
         if (mBluetoothAdapter == null) {
-// Device does not support Bluetooth
+            // Device does not support Bluetooth
             return false;
         }
         return true;
