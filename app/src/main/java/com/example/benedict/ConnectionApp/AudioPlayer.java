@@ -9,10 +9,11 @@ public class AudioPlayer {
 
     private static MediaPlayer mediaPlayer;
     //MediaPlayer.OnCompletionListener listener
-    public static void start() {
+    public static void start(MediaPlayer.OnCompletionListener listener) {
         Log.d("AudioPlayer","start()");
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
+            mediaPlayer.setOnCompletionListener(listener);
             try {
                 //mediaPlayer.setOnCompletionListener(listener);
                 mediaPlayer.setDataSource(AudioRecorder.getFilePath());
