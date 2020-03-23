@@ -58,7 +58,7 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
             }
         }
 
-        return "Finished!";
+        return "Record Timer Finished!";
     }
 
     @Override
