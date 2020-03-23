@@ -26,6 +26,23 @@ public class AudioPlayer {
         }
     }
 
+    public static Boolean hasInstance() {
+        if (mediaPlayer != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static int getCurrentDuration() {
+        return mediaPlayer.getCurrentPosition()/1000;
+    }
+
+    public static int getDuration() {
+
+        return mediaPlayer.getDuration()/1000;
+    }
+
     public static void pause() {
         Log.d("AudioPlayer","pause()");
         if (mediaPlayer != null) {

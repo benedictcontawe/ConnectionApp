@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         init();
         ManifestPermission.newInstance(this);
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
-        //TODO: PlayTimerAsyncTask - When playing the AudioPlayer should see the duration
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -113,11 +112,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         super.onResume();
         ManifestPermission.check();
     }
-
+    //region Presenter
     private void startRecord() {
         if (getMicrophoneImage() == isMicrphoneNormal()) {
             AudioRecorder.start();
-            startTimerAsyncTask();
+            startRecordTimerAsyncTask();
         }
     }
 
@@ -132,26 +131,39 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     private void playAudio() {
         AudioPlayer.start(this);
         playAudioVisibility();
+        startPlayTimerAsyncTask();
     }
 
     private void stopAudio() {
         AudioPlayer.stop();
         AudioPlayer.release();
-        stopAudioVisibility();
+        stopRecordView();
     }
 
     private void resetRecord() {
         stopAudio();
         setRecordVisibility();
+        resetRecordView();
     }
 
-    private void startTimerAsyncTask() {
+    private void startRecordTimerAsyncTask() {
         RecordTimerAsyncTask.newInstance(this);
         RecordTimerAsyncTask.execute();
     }
 
+    private void startPlayTimerAsyncTask() {
+        PlayTimerAsyncTask.newInstance(this);
+        PlayTimerAsyncTask.execute();
+    }
+    //endregion
+    //region View Animation
+    private void stopRecordView() {
+        setTimerDurationColour(false);
+        stopAudioVisibility();
+    }
+
     private void resetRecordView() {
-        setTimerDurationText("00:00");
+        setTimerDurationText("0");
         setTimerDurationColour(false);
         setMicrophoneImage(false);
     }
@@ -187,11 +199,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         imgStop.setVisibility(View.VISIBLE);
     }
 
-    private Boolean isPlayVisible() {
+    public Boolean isPlayVisible() {
         return imgPlay.getVisibility() == View.VISIBLE;
     }
 
-    private Boolean isStopVisible() {
+    public Boolean isStopVisible() {
         return imgStop.getVisibility() == View.VISIBLE;
     }
 
@@ -230,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             txtDuration.setTextColor(ContextCompat.getColor(this,R.color.black));
         }
     }
-
+    //endregion
     @Override
     public void onBackPressed() {
         super.onBackPressed();
