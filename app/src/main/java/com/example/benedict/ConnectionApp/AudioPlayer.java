@@ -8,7 +8,8 @@ import java.io.IOException;
 public class AudioPlayer {
 
     private static MediaPlayer mediaPlayer;
-    //MediaPlayer.OnCompletionListener listener
+    //MediaPlayer.OnCompletionListener listener;
+
     public static void start(MediaPlayer.OnCompletionListener listener) {
         Log.d("AudioPlayer","start()");
         if (mediaPlayer == null) {
