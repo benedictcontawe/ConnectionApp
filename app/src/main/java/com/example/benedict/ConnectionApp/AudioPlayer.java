@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class AudioPlayer {
+public class AudioPlayer extends BaseAudio {
 
     private static MediaPlayer mediaPlayer;
     //MediaPlayer.OnCompletionListener listener;
@@ -17,7 +17,7 @@ public class AudioPlayer {
             mediaPlayer.setOnCompletionListener(listener);
             try {
                 //mediaPlayer.setOnCompletionListener(listener);
-                mediaPlayer.setDataSource(AudioRecorder.getFilePath());
+                mediaPlayer.setDataSource(getFilePath());
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             } catch (IOException e) {
