@@ -16,8 +16,11 @@ public class AudioRecorder {
             mediaRecorder = new MediaRecorder();
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //Use Android Microphone
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); //.3gp
+
             //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); //For Low Quality
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB); //For High Quality
+
+            //mediaRecorder.setOutputFile("/dev/null"); //Without saving the file
             mediaRecorder.setOutputFile(getFilePath()); //Output file for the Audio Record
             try {
                 mediaRecorder.prepare();
@@ -32,6 +35,11 @@ public class AudioRecorder {
                 Log.e("AudioRecorder", "IO prepare() failed " + e.getMessage());
             }
         }
+    }
+
+    public static int getAmplitude() {
+        //Call this only after the setAudioSource()
+        return mediaRecorder.getMaxAmplitude();
     }
 
     public static void stop() {

@@ -39,7 +39,6 @@ public class AudioPlayer {
     }
 
     public static int getDuration() {
-
         return mediaPlayer.getDuration()/1000;
     }
 
