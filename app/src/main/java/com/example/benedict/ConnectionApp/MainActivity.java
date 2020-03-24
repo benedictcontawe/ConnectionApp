@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         init();
         ManifestPermission.newInstance(this);
         //TODO: imgSignal - should be equal to the input source of sound in the microphone
+        //TODO: imgRefresh - when clicked delete the recorded audio MediaRecorderSample.3gp
     }
 
     @SuppressLint("ClickableViewAccessibility")
