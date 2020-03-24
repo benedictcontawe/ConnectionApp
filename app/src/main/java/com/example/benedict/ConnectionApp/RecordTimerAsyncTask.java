@@ -48,8 +48,8 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
         MainActivity activity = activityWeakReference.get();
 
         while (activity.getMicrophoneImage() == activity.isMicrphonePressed()) {
-            publishProgress(counter);
             try {
+                publishProgress(counter);
                 Thread.sleep(1000);
                 counter++;
             } catch (InterruptedException e) {
