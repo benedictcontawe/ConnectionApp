@@ -21,8 +21,12 @@ public class AudioPlayer extends BaseAudio {
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             } catch (IOException e) {
+                e.printStackTrace();
                 Log.e("AudioPlayer", "IO prepare() failed " + e.getMessage());
             }
+        } else {
+            release();
+            start(listener);
         }
     }
 
@@ -39,7 +43,19 @@ public class AudioPlayer extends BaseAudio {
     }
 
     public static int getDuration() {
-        return mediaPlayer.getDuration()/1000;
+        if (mediaPlayer != null) {
+            return mediaPlayer.getDuration()/1000;
+        } else {
+            mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(getFilePath()); //Source file for the Audio Player
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("AudioPlayer", "IO prepare() failed " + e.getMessage());
+            }
+            return mediaPlayer.getDuration()/1000;
+        }
     }
 
     public static void pause() {

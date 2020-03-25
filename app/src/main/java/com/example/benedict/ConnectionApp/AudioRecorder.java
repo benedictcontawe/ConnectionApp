@@ -11,16 +11,9 @@ public class AudioRecorder extends BaseAudio {
     private static MediaRecorder mediaRecorder;
 
     public static void start() {
-        Log.d("AudioRecorder","startMediaRecorder()");
+        Log.d("AudioRecorder","start()");
         if (mediaRecorder == null) {
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC); //Use Android Microphone
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP); //.3gp
-
-            //mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB); //For Low Quality
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB); //For High Quality
-
-            //mediaRecorder.setOutputFile("/dev/null"); //Without saving the file
+            mediaRecorder = setMediaRecorderInstance();
             mediaRecorder.setOutputFile(getFilePath()); //Output file for the Audio Record
             try {
                 mediaRecorder.prepare();
