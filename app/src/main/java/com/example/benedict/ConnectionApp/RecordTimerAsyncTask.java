@@ -83,6 +83,8 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
         if (activity == null || activity.isFinishing()) {
             return;
         }
+
+        activity.setTimerDurationText("0 - " + AudioPlayer.getDuration());
         activity.setPlayVisibility();
         Toast.makeText(activity, string, Toast.LENGTH_SHORT).show();
     }
