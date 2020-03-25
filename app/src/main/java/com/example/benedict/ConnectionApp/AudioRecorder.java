@@ -12,7 +12,7 @@ public class AudioRecorder extends BaseAudio {
 
     public static void start() {
         Log.d("AudioRecorder","start()");
-        if (mediaRecorder == null) {
+        if (!hasInstance()) {
             mediaRecorder = setMediaRecorderInstance();
             mediaRecorder.setOutputFile(getFilePath()); //Output file for the Audio Record
             try {
@@ -45,7 +45,7 @@ public class AudioRecorder extends BaseAudio {
 
     public static void pause() {
         Log.d("AudioRecorder","pause()");
-        if (mediaRecorder != null) {
+        if (hasInstance()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mediaRecorder.pause();
             }
@@ -54,14 +54,14 @@ public class AudioRecorder extends BaseAudio {
 
     public static void stop() {
         Log.d("AudioRecorder","stopMediaRecorder()");
-        if (mediaRecorder != null) {
+        if (hasInstance()) {
             mediaRecorder.stop();
         }
     }
 
     public static void release() {
         Log.d("AudioRecorder","release()");
-        if (mediaRecorder != null) {
+        if (hasInstance()) {
             //mediaRecorder.reset();
             mediaRecorder.release();
             mediaRecorder = null;

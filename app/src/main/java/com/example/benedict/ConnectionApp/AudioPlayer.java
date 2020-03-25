@@ -12,7 +12,7 @@ public class AudioPlayer extends BaseAudio {
 
     public static void start(MediaPlayer.OnCompletionListener listener) {
         Log.d("AudioPlayer","start()");
-        if (mediaPlayer == null) {
+        if (!hasInstance()) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(listener);
             try {
@@ -43,7 +43,7 @@ public class AudioPlayer extends BaseAudio {
     }
 
     public static int getDuration() {
-        if (mediaPlayer != null) {
+        if (hasInstance()) {
             return mediaPlayer.getDuration()/1000;
         } else {
             mediaPlayer = new MediaPlayer();
@@ -60,21 +60,21 @@ public class AudioPlayer extends BaseAudio {
 
     public static void pause() {
         Log.d("AudioPlayer","pause()");
-        if (mediaPlayer != null) {
+        if (hasInstance()) {
             mediaPlayer.pause();
         }
     }
 
     public static void stop() {
         Log.d("AudioPlayer","pause()");
-        if (mediaPlayer != null) {
+        if (hasInstance()) {
             mediaPlayer.stop();
         }
     }
 
     public static void release() {
         Log.d("AudioPlayer","release()");
-        if (mediaPlayer != null) {
+        if (hasInstance()) {
             mediaPlayer.reset();
             mediaPlayer.release();
             mediaPlayer = null;
