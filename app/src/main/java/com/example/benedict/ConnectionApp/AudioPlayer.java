@@ -17,7 +17,7 @@ public class AudioPlayer extends BaseAudio {
             mediaPlayer.setOnCompletionListener(listener);
             try {
                 //mediaPlayer.setOnCompletionListener(listener);
-                mediaPlayer.setDataSource(getFilePath());
+                mediaPlayer.setDataSource(getFilePath()); //Source file for the Audio Player
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             } catch (IOException e) {

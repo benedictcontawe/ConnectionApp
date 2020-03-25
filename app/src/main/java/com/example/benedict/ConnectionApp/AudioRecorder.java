@@ -1,6 +1,7 @@
 package com.example.benedict.ConnectionApp;
 
 import android.media.MediaRecorder;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.IOException;
@@ -36,9 +37,26 @@ public class AudioRecorder extends BaseAudio {
         }
     }
 
+    public static Boolean hasInstance() {
+        if (mediaRecorder != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static int getAmplitude() {
         //Call this only after the setAudioSource()
         return mediaRecorder.getMaxAmplitude();
+    }
+
+    public static void pause() {
+        Log.d("AudioRecorder","pause()");
+        if (mediaRecorder != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mediaRecorder.pause();
+            }
+        }
     }
 
     public static void stop() {
