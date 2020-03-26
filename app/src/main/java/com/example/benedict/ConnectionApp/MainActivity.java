@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
     //endregion
 
-    public void showAppPermission() {
+    public void showAppPermissionSettings() {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", getPackageName(), null));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
