@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/txtData"
+        android:id="@+id/txtInternet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="[Wifi State]"
+        tools:text="[Internet State]"
         android:textSize="20sp"/>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/txtPing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="[Ping State]"
+        android:textSize="20sp"/>
+
+</LinearLayout>

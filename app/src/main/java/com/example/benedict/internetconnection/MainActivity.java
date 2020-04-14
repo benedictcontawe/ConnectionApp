@@ -6,31 +6,38 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.TextView;
+import java.io.IOException;
 
-public class MainActivity extends Activity{
-    private TextView txtData;
+public class MainActivity extends Activity {
+    private TextView txtInternet, txtPing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtData = (TextView) findViewById(R.id.txtData);
+        txtInternet = (TextView) findViewById(R.id.txtInternet);
+        txtPing = (TextView) findViewById(R.id.txtPing);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
+    protected void onResume() {
+        super.onResume();
         if (hasInternet()){
-            txtData.setText("Network Connection is available");
+            txtInternet.setText("Network Connection is available");
         }
         else if (!hasInternet()){
-            txtData.setText("Network Connection is not available");
+            txtInternet.setText("Network Connection is not available");
+        }
+
+        if (pingGoogle()) {
+            txtPing.setText("Google Successfuly Ping");
+        } else {
+            txtPing.setText("Unreachable ping");
         }
     }
 
-    private boolean hasInternet(){
+    private boolean hasInternet() {
         boolean hasWifi = false;
         boolean hasMobileData = false;
 
@@ -46,5 +53,18 @@ public class MainActivity extends Activity{
                     hasMobileData = true;
         }
         return hasMobileData || hasWifi;
+    }
+
+    private boolean pingGoogle() {
+        String command = "ping -c 1 google.com";
+        try {
+            return Runtime.getRuntime().exec(command).waitFor() == 0;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
