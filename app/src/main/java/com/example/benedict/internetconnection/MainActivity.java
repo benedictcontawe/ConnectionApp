@@ -1,15 +1,15 @@
 package com.example.benedict.internetconnection;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.TextView;
-import java.io.IOException;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
+
     private TextView txtInternet, txtPing;
+    private MainViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,53 +18,49 @@ public class MainActivity extends Activity {
 
         txtInternet = (TextView) findViewById(R.id.txtInternet);
         txtPing = (TextView) findViewById(R.id.txtPing);
+
+        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        observeData();
+    }
+
+    private void observeData() {
+        viewModel.getLiveInternet().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (value) {
+                    txtInternet.setText("Network Connection is available");
+                } else if (!value) {
+                    txtInternet.setText("Network Connection is not available");
+                }
+            }
+        });
+
+        viewModel.getLivePing().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (value) {
+                    txtPing.setText("Google Successfuly Ping");
+                } else {
+                    txtPing.setText("Unreachable ping");
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        viewModel.unsetConnectivity();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (hasInternet()){
-            txtInternet.setText("Network Connection is available");
-        }
-        else if (!hasInternet()){
-            txtInternet.setText("Network Connection is not available");
-        }
-
-        if (pingGoogle()) {
-            txtPing.setText("Google Successfuly Ping");
-        } else {
-            txtPing.setText("Unreachable ping");
-        }
+        viewModel.setConnectivity();
     }
 
-    private boolean hasInternet() {
-        boolean hasWifi = false;
-        boolean hasMobileData = false;
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
-
-        for (NetworkInfo info : networkInfos){
-            if (info.getTypeName().equalsIgnoreCase("WIFI"))
-                if (info.isConnected())
-                    hasWifi = true;
-            if (info.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (info.isConnected())
-                    hasMobileData = true;
-        }
-        return hasMobileData || hasWifi;
-    }
-
-    private boolean pingGoogle() {
-        String command = "ping -c 1 google.com";
-        try {
-            return Runtime.getRuntime().exec(command).waitFor() == 0;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
