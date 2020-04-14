@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BluetoothApp.iml" filepath="$PROJECT_DIR$/BluetoothApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/BluetoothArduino.iml" filepath="$PROJECT_DIR$/BluetoothArduino.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ConnectionApp.iml" filepath="$PROJECT_DIR$/ConnectionApp.iml" group="ConnectionApp" />
+      <module fileurl="file://$PROJECT_DIR$/app/ConnectionApp-app.iml" filepath="$PROJECT_DIR$/app/ConnectionApp-app.iml" group="ConnectionApp/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
