@@ -11,7 +11,7 @@ public class SoundLevelAsyncTask extends AsyncTask<Integer, String, String> {
     private WeakReference<MainActivity> activityWeakReference;
     private static SoundLevelAsyncTask soundLevelAsyncTask;
 
-    public static SoundLevelAsyncTask newInstance(MainActivity activity) {
+    public static SoundLevelAsyncTask newInstance(MainActivity activity, Boolean isRecording) {
         Log.d("SoundLevelAsyncTask","newInstance()");
         soundLevelAsyncTask = new SoundLevelAsyncTask(activity);
         return soundLevelAsyncTask;

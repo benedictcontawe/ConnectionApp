@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         init();
         ManifestPermission.newInstance(this);
+        Log.d("getMicrophoneImage",String.valueOf(getMicrophoneImage() == isMicrphoneNormal()));
         //TODO: imgSignal - should be equal to the input decibel source of sound in the microphone
         //TODO: imgRefresh - when clicked delete the recorded audio MediaRecorderSample.3gp
     }

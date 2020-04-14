@@ -52,6 +52,7 @@ public class RecordTimerAsyncTask extends AsyncTask<Integer, Integer, String> {
                 publishProgress(counter);
                 Thread.sleep(1000);
                 counter++;
+                Log.d("AudioDecibel","getAmplitude()" + AudioDecibel.getAmplitude());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Log.e("RecordTimerAsyncTask","Error " + e.getMessage());
