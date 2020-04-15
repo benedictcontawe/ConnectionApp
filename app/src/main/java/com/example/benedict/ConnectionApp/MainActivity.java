@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, MediaPlayer.OnCompletionListener {
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void resetRecordView() {
-        setTimerDurationText("0");
+        setTimerDurationText("0:00");
         setTimerDurationColour(false);
         setMicrophoneImage(false);
     }
@@ -259,32 +260,64 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
     //endregion
+    //region Manifest Permission
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("PermissionsResult", "requestCode" + requestCode);
+        Log.d("PermissionsResult", "permissions" + permissions);
+        Log.d("PermissionsResult", "grantResults" + grantResults);
         if (ManifestPermission.RECORD_AUDIO == requestCode) {
-            Log.d("PermissionsResult", "requestCode" + requestCode);
-            Log.d("PermissionsResult", "permissions" + permissions);
-            Log.d("PermissionsResult", "grantResults" + grantResults);
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this,"Permission granted successfully", Toast.LENGTH_SHORT).show();
-                manifestPermission.setRequestGranted();
-                enableRecordView();
-            }  else {
-                disableRecordView();
-                //showAppPermissionSettings();
+            for (int grantResult : grantResults) {
+                switch (grantResult) {
+                    case PackageManager.PERMISSION_GRANTED:
+                        manifestPermission.setRequestGranted(true);
+                        enableRecordView();
+                        break;
+                    case PackageManager.PERMISSION_DENIED:
+                        manifestPermission.setRequestGranted(false);
+                        disableRecordView();
+                        break;
+                    default:
+                        manifestPermission.setRequestGranted(false);
+                        disableRecordView();
+                        break;
+                }
             }
+            for(String permission : permissions) {
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+                    Log.d("PermissionsResult", "Denied " + permission);
+                    manifestPermission.setNeverAskAgain(false);
+                } else {
+                    if(ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+                        Log.d("PermissionsResult", "Allowed " + permission);
+                    } else{
+                        Log.d("PermissionsResult", "set to never ask again " + permission);
+                        manifestPermission.setNeverAskAgain(true);
+                    }
+                }
+            }
+            showPermissionsGrantedSuccessfully();
+            showAppPermissionSettings();
         }
     }
 
-    public void showAppPermissionSettings() {
-        Toast.makeText(this,"Hardware Permissions Disabled", Toast.LENGTH_LONG).show();
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.fromParts("package", getPackageName(), null));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    private void showPermissionsGrantedSuccessfully() {
+        if (manifestPermission.getRequestGranted()) {
+            Toast.makeText(this,"Permissions granted successfully", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    private void showAppPermissionSettings() {
+        if (manifestPermission.isNeverAskAgain()) {
+            Toast.makeText(this, "Hardware Permissions Disabled", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.fromParts("package", getPackageName(), null));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+    //endregion
     @Override
     public void onBackPressed() {
         super.onBackPressed();

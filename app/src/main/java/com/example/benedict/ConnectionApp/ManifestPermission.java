@@ -13,7 +13,7 @@ public class ManifestPermission {
 
     private static String TAG = ManifestPermission.class.getSimpleName();
     public static final int RECORD_AUDIO = 0;
-    private boolean requestGranted;
+    private boolean requestGranted,neverAskAgain;
     private static ManifestPermission manifestPermission;
     private static WeakReference<MainActivity> activityWeakReference;
 
@@ -28,9 +28,24 @@ public class ManifestPermission {
         activityWeakReference = new WeakReference<MainActivity>(activity);
     }
 
-    public void setRequestGranted() {
-        Log.d(TAG,"setRequestGranted()");
-        requestGranted = true;
+    public void setRequestGranted(boolean requestGranted) {
+        Log.d(TAG,"setRequestGranted(" + requestGranted + ")");
+        this.requestGranted = requestGranted;
+    }
+
+    public void setNeverAskAgain(boolean neverAskAgain) {
+        Log.d(TAG,"setNeverAskAgain(" + neverAskAgain + ")");
+        this.neverAskAgain = neverAskAgain;
+    }
+
+    public boolean getRequestGranted() {
+        Log.d(TAG,"getRequestGranted()");
+        return requestGranted;
+    }
+
+    public boolean isNeverAskAgain() {
+        Log.d(TAG,"getRequestGranted()");
+        return neverAskAgain;
     }
 
     public void check() {
@@ -41,25 +56,21 @@ public class ManifestPermission {
         }
 
         if (!hasMicrophone()) {
-            requestGranted = false;
             activity.disableRecordView();
             return;
         }
 
         if (!isMicrophonePermissionGranted()) {
-            requestGranted = false;
-            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission_group.STORAGE};
+            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             requestPermissions(permissions);
         }
 
         if(!isWriteExternalStorageGranted()) {
-            requestGranted = false;
-            String[] permissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission_group.STORAGE};
+            String[] permissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
             requestPermissions(permissions);
         }
         /*
         if(!isExternalStorageMounted()) {
-            requestGranted = false;
             String[] permissions = new String[] {Manifest.permission_group.STORAGE};
             requestPermissions(permissions);
         }
