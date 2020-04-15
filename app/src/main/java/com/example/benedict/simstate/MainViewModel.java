@@ -26,7 +26,7 @@ public class MainViewModel extends AndroidViewModel {
         telephonyManager = (TelephonyManager) getApplication().getSystemService(Context.TELEPHONY_SERVICE);
         simChangedListener = new SimChangedListener(this);
     }
-    //region Register Unregister Internet Detection Callback
+    //region Register Unregister Sim State Detection Callback
     public void registerSimState() {
         telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_SERVICE_STATE);
     }
