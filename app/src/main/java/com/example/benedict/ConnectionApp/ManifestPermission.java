@@ -26,7 +26,6 @@ public class ManifestPermission {
     private ManifestPermission(MainActivity activity) {
         Log.d(TAG,"Constructor");
         activityWeakReference = new WeakReference<MainActivity>(activity);
-        requestGranted = false;
     }
 
     public void setRequestGranted() {
@@ -42,19 +41,29 @@ public class ManifestPermission {
         }
 
         if (!hasMicrophone()) {
+            requestGranted = false;
             activity.disableRecordView();
             return;
         }
 
         if (!isMicrophonePermissionGranted()) {
-            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            requestGranted = false;
+            String[] permissions = new String[] {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission_group.STORAGE};
             requestPermissions(permissions);
         }
 
-        if(isExternalStorageMounted()) {
-            String[] permissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if(!isWriteExternalStorageGranted()) {
+            requestGranted = false;
+            String[] permissions = new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission_group.STORAGE};
             requestPermissions(permissions);
         }
+        /*
+        if(!isExternalStorageMounted()) {
+            requestGranted = false;
+            String[] permissions = new String[] {Manifest.permission_group.STORAGE};
+            requestPermissions(permissions);
+        }
+        */
     }
 
     private boolean hasMicrophone() {
@@ -83,9 +92,31 @@ public class ManifestPermission {
                 ) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private boolean isExternalStorageMounted() {
+    private boolean isWriteExternalStorageGranted() {
         Log.d(TAG,"isExternalStorageMounted()");
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+        MainActivity activity = activityWeakReference.get();
+        if (activity == null || activity.isFinishing()) {
+            return false;
+        }
+
+        return ActivityCompat
+                .checkSelfPermission(
+                        activity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean isExternalStorageMounted() {
+        MainActivity activity = activityWeakReference.get();
+        if (activity == null || activity.isFinishing()) {
+            return false;
+        }
+        //return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+        return ActivityCompat
+                .checkSelfPermission(
+                        activity,
+                        Manifest.permission_group.STORAGE
+                ) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermissions(String[] permissions) {
