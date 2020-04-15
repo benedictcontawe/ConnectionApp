@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
                 if (value) {
                     txtPing.setText("Google Successfuly Ping");
                 } else {
-                    txtPing.setText("Unreachable ping");
+                    txtPing.setText("Google Unreachable ping");
                 }
             }
         });
