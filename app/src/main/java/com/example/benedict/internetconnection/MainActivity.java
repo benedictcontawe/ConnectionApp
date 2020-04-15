@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView txtInternet, txtPing;
+    private TextView txtSim;
     private MainViewModel viewModel;
 
     @Override
@@ -16,32 +16,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txtInternet = (TextView) findViewById(R.id.txtInternet);
-        txtPing = (TextView) findViewById(R.id.txtPing);
+        txtSim = (TextView) findViewById(R.id.txtSim);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         observeData();
     }
 
     private void observeData() {
-        viewModel.getLiveInternet().observe(this, new Observer<Boolean>() {
+        viewModel.getLiveSimState().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 if (value) {
-                    txtInternet.setText("Network Connection is available");
+                    txtSim.setText("Sim is inserted");
                 } else if (!value) {
-                    txtInternet.setText("Network Connection is not available");
-                }
-            }
-        });
-
-        viewModel.getLivePing().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean value) {
-                if (value) {
-                    txtPing.setText("Google Successfuly Ping");
-                } else {
-                    txtPing.setText("Unreachable ping");
+                    txtSim.setText("Sim is not inserted");
                 }
             }
         });
@@ -50,13 +38,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        viewModel.unsetConnectivity();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.setConnectivity();
     }
 
     @Override

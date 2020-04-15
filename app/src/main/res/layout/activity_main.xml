@@ -9,17 +9,10 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/txtInternet"
+        android:id="@+id/txtSim"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="[Internet State]"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:id="@+id/txtPing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="[Ping State]"
+        tools:text="[Sim State]"
         android:textSize="20sp"/>
 
 </LinearLayout>
