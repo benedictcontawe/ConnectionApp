@@ -2,6 +2,7 @@ package com.example.benedict.ConnectionApp;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -13,7 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
     private TextView txtDuration;
     private ImageView imgSignal,imgMicrophone, imgPlay, imgStop, imgRefresh;
+    private ManifestPermission manifestPermission;
 
     private Rect rect;
 
@@ -30,10 +32,11 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setContentView(R.layout.activity_main);
 
         init();
-        ManifestPermission.newInstance(this);
+        manifestPermission = ManifestPermission.newInstance(this);
         Log.d("getMicrophoneImage",String.valueOf(getMicrophoneImage() == isMicrphoneNormal()));
         //TODO: imgSignal - should be equal to the input decibel source of sound in the microphone
         //TODO: imgRefresh - when clicked delete the recorded audio MediaRecorderSample.3gp
+        //TODO: showAppPermissionSettings() - call this method when the permissions is not granted and checked the never ask again
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -115,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onResume() {
         super.onResume();
-        ManifestPermission.check();
+        manifestPermission.check();
     }
     //region Presenter
     private void startRecord() {
@@ -171,6 +174,14 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         setTimerDurationText("0");
         setTimerDurationColour(false);
         setMicrophoneImage(false);
+    }
+
+    public void enableRecordView() {
+        setTimerDurationText("00:00");
+        imgRefresh.setVisibility(View.INVISIBLE);
+        imgMicrophone.setVisibility(View.VISIBLE);
+        imgPlay.setVisibility(View.INVISIBLE);
+        imgStop.setVisibility(View.INVISIBLE);
     }
 
     public void disableRecordView() {
@@ -248,8 +259,26 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
     }
     //endregion
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ManifestPermission.RECORD_AUDIO == requestCode) {
+            Log.d("PermissionsResult", "requestCode" + requestCode);
+            Log.d("PermissionsResult", "permissions" + permissions);
+            Log.d("PermissionsResult", "grantResults" + grantResults);
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this,"Permission granted successfully", Toast.LENGTH_SHORT).show();
+                manifestPermission.setRequestGranted();
+                enableRecordView();
+            }  else {
+                disableRecordView();
+                //showAppPermissionSettings();
+            }
+        }
+    }
 
     public void showAppPermissionSettings() {
+        Toast.makeText(this,"Hardware Permissions Disabled", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.fromParts("package", getPackageName(), null));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

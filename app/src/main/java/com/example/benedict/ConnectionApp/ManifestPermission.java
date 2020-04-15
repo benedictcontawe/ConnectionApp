@@ -11,23 +11,31 @@ import java.lang.ref.WeakReference;
 
 public class ManifestPermission {
 
-    private static final int RECORD_AUDIO = 0;
+    private static String TAG = ManifestPermission.class.getSimpleName();
+    public static final int RECORD_AUDIO = 0;
+    private boolean requestGranted;
     private static ManifestPermission manifestPermission;
     private static WeakReference<MainActivity> activityWeakReference;
 
     public static ManifestPermission newInstance(MainActivity activity) {
-        Log.d("ManifestPermission","newInstance()");
+        Log.d(TAG,"newInstance()");
         manifestPermission = new ManifestPermission(activity);
         return manifestPermission;
     }
 
     private ManifestPermission(MainActivity activity) {
-        Log.d("ManifestPermission","Constructor");
+        Log.d(TAG,"Constructor");
         activityWeakReference = new WeakReference<MainActivity>(activity);
+        requestGranted = false;
     }
 
-    public static void check() {
-        Log.d("ManifestPermission","check()");
+    public void setRequestGranted() {
+        Log.d(TAG,"setRequestGranted()");
+        requestGranted = true;
+    }
+
+    public void check() {
+        Log.d(TAG,"check()");
         MainActivity activity = activityWeakReference.get();
         if (activity == null || activity.isFinishing()) {
             return;
@@ -49,8 +57,8 @@ public class ManifestPermission {
         }
     }
 
-    private static boolean hasMicrophone() {
-        Log.d("ManifestPermission","hasMicrophone()");
+    private boolean hasMicrophone() {
+        Log.d(TAG,"hasMicrophone()");
         MainActivity activity = activityWeakReference.get();
         if (activity == null || activity.isFinishing()) {
             return false;
@@ -61,8 +69,8 @@ public class ManifestPermission {
                 PackageManager.FEATURE_MICROPHONE);
     }
 
-    private static boolean isMicrophonePermissionGranted() {
-        Log.d("ManifestPermission","isMicrophonePermissionGranted()");
+    private boolean isMicrophonePermissionGranted() {
+        Log.d(TAG,"isMicrophonePermissionGranted()");
         MainActivity activity = activityWeakReference.get();
         if (activity == null || activity.isFinishing()) {
             return false;
@@ -75,21 +83,23 @@ public class ManifestPermission {
                 ) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private static void requestPermissions(String[] permissions) {
-        Log.d("ManifestPermission","requestPermissions()");
+    private boolean isExternalStorageMounted() {
+        Log.d(TAG,"isExternalStorageMounted()");
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    private void requestPermissions(String[] permissions) {
+        Log.d(TAG,"requestPermissions()");
         MainActivity activity = activityWeakReference.get();
         if (activity == null || activity.isFinishing()) {
             return;
         }
-        ActivityCompat.requestPermissions(
-                activity,
-                permissions,
-                RECORD_AUDIO
-        );
-    }
-
-    private static boolean isExternalStorageMounted() {
-        Log.d("ManifestPermission","isExternalStorageMounted()");
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+        if (!requestGranted) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    permissions,
+                    RECORD_AUDIO
+            );
+        }
     }
 }
