@@ -1,8 +1,10 @@
 package com.example.benedict.internetconnection;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,6 +22,7 @@ import java.io.IOException;
 
 public class MainViewModel extends AndroidViewModel {
 
+    private static String TAG = MainViewModel.class.getSimpleName();
     private ConnectivityManager connectivityManager;
     private ConnectivityManager.NetworkCallback networkCallback;
     private NetworkReceiver networkReceiver;
@@ -29,10 +33,9 @@ public class MainViewModel extends AndroidViewModel {
         super(application);
         connectivityManager = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkReceiver = new NetworkReceiver(this);
-
     }
-
-    public void setConnectivity() {
+    //region Register Unregister Internet Detection Callback
+    public void registerConnectivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             setNetworkCallback();
             connectivityManager.registerDefaultNetworkCallback(networkCallback);
@@ -44,14 +47,15 @@ public class MainViewModel extends AndroidViewModel {
         }
     }
 
-    public void unsetConnectivity() {
+    public void unregisterConnectivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             connectivityManager.unregisterNetworkCallback(networkCallback);
         } else {
             getApplication().unregisterReceiver(networkReceiver);
         }
     }
-
+    //endregion
+    //region ConnectivityManager initialization of NetworkCallback and NetworkRequest
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setNetworkCallback() {
         networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -85,7 +89,8 @@ public class MainViewModel extends AndroidViewModel {
                 .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
                 .build();
     }
-
+    //endregion
+    //region LiveData Observers
     public LiveData<Boolean> getLiveInternet() {
         return liveInternet;
     }
@@ -93,12 +98,12 @@ public class MainViewModel extends AndroidViewModel {
     public LiveData<Boolean> getLivePing() {
         return livePing;
     }
-
+    //endregion
     public void pingAll() {
         liveInternet.postValue(hasInternet());
         livePing.postValue(pingGoogle());
     }
-
+    //region Ping methods for checking of internet and ping google
     private boolean hasInternet() {
         boolean hasWifi = false;
         boolean hasMobileData = false;
@@ -126,7 +131,50 @@ public class MainViewModel extends AndroidViewModel {
             return false;
         }
     }
+    //endregion
+    //region Manifest Permissions
+    public boolean checkPermission() {
+        boolean value = false;
+        Log.d(TAG,"checkPermission()");
+        if (isInternetPermissionGranted()) {
+            Log.d(TAG,"isInternetPermissionGranted()");
+            value = true;
+        }
+        if (isAccessWifiStatePermissionGranted()) {
+            Log.d(TAG,"isAccessWifiStatePermissionGranted()");
+            value = true;
+        }
+        if (isAccessNetworkStatePermissionGranted()) {
+            Log.d(TAG,"isAccessNetworkStatePermissionGranted()");
+            value = true;
+        }
+        return value;
+    }
 
+    private boolean isInternetPermissionGranted() {
+        return ActivityCompat
+                .checkSelfPermission(
+                        getApplication(),
+                        Manifest.permission.INTERNET
+                ) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean isAccessWifiStatePermissionGranted() {
+        return ActivityCompat
+                .checkSelfPermission(
+                        getApplication(),
+                        Manifest.permission.ACCESS_WIFI_STATE
+                ) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private boolean isAccessNetworkStatePermissionGranted() {
+        return ActivityCompat
+                .checkSelfPermission(
+                        getApplication(),
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                ) == PackageManager.PERMISSION_GRANTED;
+    }
+    //endregion
     @Override
     protected void onCleared() {
         super.onCleared();
