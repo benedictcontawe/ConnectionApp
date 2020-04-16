@@ -28,7 +28,7 @@ public class MainViewModel extends AndroidViewModel {
     }
     //region Register Unregister Sim State Detection Callback
     public void registerSimState() {
-        telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_SERVICE_STATE);
+        telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_SERVICE_STATE|PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
 
     public void unregisterSimState() {

@@ -2,6 +2,7 @@ package com.example.benedict.simstate;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
+import android.telephony.SignalStrength;
 import android.util.Log;
 
 public class SimChangedListener extends PhoneStateListener {
@@ -18,6 +19,13 @@ public class SimChangedListener extends PhoneStateListener {
     public void onServiceStateChanged(ServiceState serviceState) {
         super.onServiceStateChanged(serviceState);
         Log.d(TAG,"onServiceStateChanged(" + serviceState + ")");
+        mainViewModel.checkSimState();
+    }
+
+    @Override
+    public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+        super.onSignalStrengthsChanged(signalStrength);
+        Log.d(TAG,"onSignalStrengthsChanged(" + signalStrength + ")");
         mainViewModel.checkSimState();
     }
 }
