@@ -42,14 +42,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         viewModel.unregisterSimState();
+        viewModel.checkSimState();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         requestPermissions(viewModel.checkPermission());
-        viewModel.registerSimState();
         viewModel.checkSimState();
+        viewModel.registerSimState();
     }
 
     private void requestPermissions(boolean permissionGranted) {
