@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">SimCellularChecker</string>
+    <string name="app_name">ManifestPermissionChecker</string>
     <!--<string name="app_name">Locker</string>-->
 </resources>

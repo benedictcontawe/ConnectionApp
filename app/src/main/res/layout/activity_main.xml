@@ -9,10 +9,10 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/txtSim"
+        android:id="@+id/txtData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="[Sim State]"
+        tools:text="[Permission State]"
         android:textSize="20sp"/>
 
 </LinearLayout>
