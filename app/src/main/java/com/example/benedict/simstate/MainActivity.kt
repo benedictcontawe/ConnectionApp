@@ -1,5 +1,6 @@
 package com.example.benedict.simstate
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -201,7 +202,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         )
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d(TAG,"onActivityResult($requestCode,$resultCode,$data)")
     }
 
     override fun onDestroy() {
