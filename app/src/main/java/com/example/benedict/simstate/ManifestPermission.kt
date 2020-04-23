@@ -22,7 +22,7 @@ object ManifestPermission {
     const val MICROPHONE_PERMISSION_CODE = 1003
     const val CAMERA_PERMISSION_CODE = 1004
     const val VIDEO_CALL_PERMISSION_CODE = 1005
-    const val GALLARY_PERMISSION_CODE = 1006
+    const val GALLERY_PERMISSION_CODE = 1006
 
     val allPermissions =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

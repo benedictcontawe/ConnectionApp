@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             galleryRequestPermissions -> {
                 ManifestPermission.requestPermissions(this,
                     ManifestPermission.galleryPermissions,
-                    ManifestPermission.GALLARY_PERMISSION_CODE
+                    ManifestPermission.GALLERY_PERMISSION_CODE
                 )
             }
             showRationalDialog -> {
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("PermissionsResult","permissions " + permissions.contentToString())
         Log.d("PermissionsResult","grantResults " + grantResults.contentToString())
 
-        permissions.map {permission ->
+        permissions.map { permission ->
             ManifestPermission.checkNeverAskAgain(this,permission,
                 isNeverAskAgain = {
                     Log.d("PermissionsResult", "checkNeverAskAgain isNeverAskAgain single $permission")
@@ -150,11 +150,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             ManifestPermission.checkPermissionsResult(this,permission,
                 isNeverAskAgain = {
-                    Log.d("PermissionsResult", "checkPermissionsResult isNeverAskAgain single $permission")
+                    Log.e("PermissionsResult", "checkPermissionsResult isNeverAskAgain single $permission")
                 }, isDenied = {
-                    Log.d("PermissionsResult","checkPermissionsResult isDenied single $permission")
+                    Log.e("PermissionsResult","checkPermissionsResult isDenied single $permission")
                 }, isGranted = {
-                    Log.d("PermissionsResult","checkPermissionsResult isGranted single $permission")
+                    Log.e("PermissionsResult","checkPermissionsResult isGranted single $permission")
                 }
             )
         }
@@ -171,10 +171,34 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         ManifestPermission.checkPermissionsResult(this, permissions, grantResults,
             isNeverAskAgain =  {
                 Log.d("PermissionsResult", "checkPermissionsResult isNeverAskAgain")
+                when(requestCode) {
+                    ManifestPermission.ALL_PERMISSION_CODE -> { setTextData("All Permissions is Never Ask Again!") }
+                    ManifestPermission.TELEPHONY_PERMISSION_CODE -> { setTextData("Telephony Permissions is Never Ask Again!") }
+                    ManifestPermission.MICROPHONE_PERMISSION_CODE -> { setTextData("Microphone Permissions is Never Ask Again!") }
+                    ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions is Never Ask Again!") }
+                    ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions is Never Ask Again!") }
+                    ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions is Never Ask Again!") }
+                }
             }, isDenied = {
                 Log.d("PermissionsResult","checkPermissionsResult isDenied")
+                when(requestCode) {
+                    ManifestPermission.ALL_PERMISSION_CODE -> { setTextData("All Permissions Denied!") }
+                    ManifestPermission.TELEPHONY_PERMISSION_CODE -> { setTextData("Telephony Permissions Denied!") }
+                    ManifestPermission.MICROPHONE_PERMISSION_CODE -> { setTextData("Microphone Permissions Denied!") }
+                    ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Denied!") }
+                    ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Denied!") }
+                    ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Denied!") }
+                }
             }, isGranted = {
                 Log.d("PermissionsResult","checkPermissionsResult isGranted")
+                when(requestCode) {
+                    ManifestPermission.ALL_PERMISSION_CODE -> { setTextData("All Permissions Granted!") }
+                    ManifestPermission.TELEPHONY_PERMISSION_CODE -> { setTextData("Telephony Permissions Granted!") }
+                    ManifestPermission.MICROPHONE_PERMISSION_CODE -> { setTextData("Microphone Permissions Granted!") }
+                    ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Granted!") }
+                    ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Granted!") }
+                    ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Granted!") }
+                }
             }
         )
 
