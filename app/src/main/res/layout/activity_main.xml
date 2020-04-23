@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="1"
     android:orientation="vertical"
     android:gravity="center"
     tools:context=".MainActivity">
@@ -11,8 +12,136 @@
     <TextView
         android:id="@+id/txtData"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:gravity="center_vertical"
         tools:text="[Permission State]"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:background="@color/gray_153"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/allCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check All Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/telephonyCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Telephony Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/microphoneCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Microphone Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/cameraCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Camera Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/videoCallCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Video Call Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/galleryCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Gallery Permissions"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:background="@color/gray_225"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/allRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request All Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/telephonyRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Telephony Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/microphoneRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Microphone Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/cameraRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Camera Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/videoCallRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Video Call Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/galleryRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Gallery Permissions"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/showRationalDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:text="Go to App Permission Settings"
+        android:textAllCaps="false"/>
 
 </LinearLayout>
