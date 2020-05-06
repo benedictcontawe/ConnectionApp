@@ -1,9 +1,10 @@
-package com.example.benedict.simstate
+package com.example.benedict.permission
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -151,11 +152,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             ManifestPermission.checkPermissionsResult(this,permission,
                 isNeverAskAgain = {
-                    Log.e("PermissionsResult", "checkPermissionsResult isNeverAskAgain single $permission")
+                    Log.d("PermissionsResult", "checkPermissionsResult isNeverAskAgain single $permission")
                 }, isDenied = {
-                    Log.e("PermissionsResult","checkPermissionsResult isDenied single $permission")
+                    Log.d("PermissionsResult","checkPermissionsResult isDenied single $permission")
                 }, isGranted = {
-                    Log.e("PermissionsResult","checkPermissionsResult isGranted single $permission")
+                    Log.d("PermissionsResult","checkPermissionsResult isGranted single $permission")
                 }
             )
         }
@@ -207,9 +208,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG,"onActivityResult($requestCode,$resultCode,$data)")
+        if (requestCode == ManifestPermission.PERMISSION_SETTINGS_CODE)
+            Toast.makeText(this,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
+        Log.d(TAG,"onDestroy()")
         super.onDestroy()
     }
 }

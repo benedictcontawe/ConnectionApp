@@ -1,4 +1,4 @@
-package com.example.benedict.simstate;
+package com.example.benedict.permission;
 
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.benedict.simstate"
+    package="com.example.benedict.permission"
     android:versionCode="1"
     android:versionName="1.0">
 
@@ -37,7 +37,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.benedict.simstate.MainActivity"
+            android:name="com.example.benedict.permission.MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

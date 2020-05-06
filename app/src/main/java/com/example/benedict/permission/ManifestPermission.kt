@@ -1,4 +1,4 @@
-package com.example.benedict.simstate
+package com.example.benedict.permission
 
 import android.Manifest
 import android.app.Activity
@@ -17,6 +17,7 @@ object ManifestPermission {
 
     private val TAG = ManifestPermission::class.java.simpleName
 
+    const val PERMISSION_SETTINGS_CODE = 1000
     const val ALL_PERMISSION_CODE = 1001
     const val TELEPHONY_PERMISSION_CODE = 1002
     const val MICROPHONE_PERMISSION_CODE = 1003
@@ -189,6 +190,6 @@ object ManifestPermission {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-        activity.startActivityForResult(intent, 1113)
+        activity.startActivityForResult(intent, PERMISSION_SETTINGS_CODE)
     }
 }

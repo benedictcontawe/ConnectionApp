@@ -1,4 +1,4 @@
-package com.example.benedict.simstate;
+package com.example.benedict.permission;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
