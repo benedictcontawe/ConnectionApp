@@ -108,6 +108,11 @@ object ManifestPermission {
         }
     }
 
+    fun requestPermissions(activity : Activity, permission : String, requestCode : Int) {
+        Log.d(TAG,"requestPermissions($activity,$permission,$requestCode")
+        ActivityCompat.requestPermissions(activity, arrayOf(permission),requestCode)
+    }
+
     fun requestPermissions(activity : Activity, permissions : Array<String>, requestCode : Int) {
         Log.d(TAG,"requestPermissions($activity,${permissions.contentToString()},$requestCode")
         ActivityCompat.requestPermissions(activity, permissions,requestCode)
