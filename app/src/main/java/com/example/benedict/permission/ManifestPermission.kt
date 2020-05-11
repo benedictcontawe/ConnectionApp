@@ -96,7 +96,7 @@ object ManifestPermission {
         }
     }
 
-    fun checkSelfPermission(context : Context, permissions : Array<String>, isGranted: () -> Unit = {}, isDenied: () -> Unit = {}) {
+    fun checkSelfPermission(context : Context, permissions : Array<String>, isGranted : () -> Unit = {}, isDenied : () -> Unit = {}) {
         Log.d(TAG,"checkSelfPermission($context,${permissions.contentToString()},isGranted(),isDenied())")
         if (permissions.filter { permission -> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED}.isEmpty()) {
             Log.d(TAG,"allGranted()")

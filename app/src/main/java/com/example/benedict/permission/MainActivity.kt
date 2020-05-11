@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         private val TAG : String = MainActivity::class.java.getSimpleName()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //region Check Permission On Click Listener
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         txtData.setText(text)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode : Int, permissions : Array<String>, grantResults : IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.d("PermissionsResult", "requestCode $requestCode")
         Log.d("PermissionsResult","permissions " + permissions.contentToString())
