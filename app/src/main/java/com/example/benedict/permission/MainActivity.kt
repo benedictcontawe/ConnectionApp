@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG,"onActivityResult($requestCode,$resultCode,$data)")
-        if (requestCode == ManifestPermission.PERMISSION_SETTINGS_CODE)
+        if (requestCode == ManifestPermission.SETTINGS_PERMISSION_CODE)
             Toast.makeText(this,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
     }
 
