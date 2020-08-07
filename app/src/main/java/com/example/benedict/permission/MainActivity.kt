@@ -198,6 +198,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions is Never Ask Again!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions is Never Ask Again!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions is Never Ask Again!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions is Never Ask Again!") }
                 }
             }, isDenied = {
                 Log.d("PermissionsResult","checkPermissionsResult isDenied")
@@ -208,6 +209,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Denied!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Denied!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Denied!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions Denied!") }
                 }
             }, isGranted = {
                 Log.d("PermissionsResult","checkPermissionsResult isGranted")
@@ -218,6 +220,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Granted!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Granted!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Granted!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions Granted!") }
                 }
             }
         )
