@@ -24,41 +24,42 @@ object ManifestPermission {
     const val CAMERA_PERMISSION_CODE = 1004
     const val VIDEO_CALL_PERMISSION_CODE = 1005
     const val GALLERY_PERMISSION_CODE = 1006
+    const val CONTACT_PERMISSION_CODE = 1007
 
     val allPermissions =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_PHONE_NUMBERS
-        )
-    } else {
-        arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_NUMBERS
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
 
     val telephonyPermissions =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS,
-            Manifest.permission.READ_PHONE_NUMBERS
-        )
-    } else {
-        arrayOf(
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.READ_SMS
-        )
-    }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_PHONE_NUMBERS
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS
+            )
+        }
 
     val microphonePermission = arrayOf(
         Manifest.permission.RECORD_AUDIO
@@ -83,6 +84,20 @@ object ManifestPermission {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
     }
+
+    val contactPermission =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            arrayOf(
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_PHONE_NUMBERS
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS
+            )
+        }
 
     fun checkSelfPermission(context : Context, permission : String, isGranted : () -> Unit = {}, isDenied : () -> Unit = {}) {
         Log.d(TAG,"checkSelfPermission($context,$permission,isGranted(),isDenied())")

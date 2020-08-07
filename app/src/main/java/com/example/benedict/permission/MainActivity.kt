@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cameraCheckPermissions.setOnClickListener(this)
         videoCallCheckPermissions.setOnClickListener(this)
         galleryCheckPermissions.setOnClickListener(this)
+        contactCheckPermissions.setOnClickListener(this)
         //endregion
         //region Request Permission On Click Listener
         allRequestPermissions.setOnClickListener(this)
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cameraRequestPermissions.setOnClickListener(this)
         videoCallRequestPermissions.setOnClickListener(this)
         galleryRequestPermissions.setOnClickListener(this)
+        contactRequestPermissions.setOnClickListener(this)
         //endregion
         showRationalDialog.setOnClickListener(this)
     }
@@ -88,6 +90,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     isDenied = { setTextData("Gallery Permissions Denied!") }
                 )
             }
+            contactCheckPermissions -> {
+                ManifestPermission.checkSelfPermission(this,
+                    ManifestPermission.contactPermission,
+                    isGranted = { setTextData("Contact Permissions Granted!") },
+                    isDenied = { setTextData("Contact Permissions Denied!") }
+                )
+            }
             allRequestPermissions -> {
                 ManifestPermission.requestPermissions(this,
                     ManifestPermission.allPermissions,
@@ -122,6 +131,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 ManifestPermission.requestPermissions(this,
                     ManifestPermission.galleryPermissions,
                     ManifestPermission.GALLERY_PERMISSION_CODE
+                )
+            }
+            contactRequestPermissions -> {
+                ManifestPermission.requestPermissions(this,
+                    ManifestPermission.contactPermission,
+                    ManifestPermission.CONTACT_PERMISSION_CODE
                 )
             }
             showRationalDialog -> {
@@ -180,6 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions is Never Ask Again!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions is Never Ask Again!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions is Never Ask Again!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions is Never Ask Again!") }
                 }
             }, isDenied = {
                 Log.d("PermissionsResult","checkPermissionsResult isDenied")
@@ -190,6 +206,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Denied!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Denied!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Denied!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions Denied!") }
                 }
             }, isGranted = {
                 Log.d("PermissionsResult","checkPermissionsResult isGranted")
@@ -200,6 +217,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     ManifestPermission.CAMERA_PERMISSION_CODE -> { setTextData("Camera Permissions Granted!") }
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE -> { setTextData("Video Call Permissions Granted!") }
                     ManifestPermission.GALLERY_PERMISSION_CODE -> { setTextData("Gallery Permissions Granted!") }
+                    ManifestPermission.CONTACT_PERMISSION_CODE -> { setTextData("Contact Permissions Granted!") }
                 }
             }
         )
