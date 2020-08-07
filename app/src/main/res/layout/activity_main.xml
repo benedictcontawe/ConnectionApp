@@ -73,6 +73,13 @@
                 android:text="Check Gallery Permissions"
                 android:textAllCaps="false"/>
 
+            <Button
+                android:id="@+id/contactCheckPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check Contact Permissions"
+                android:textAllCaps="false"/>
+
         </LinearLayout>
 
     </ScrollView>
@@ -130,6 +137,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Request Gallery Permissions"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/contactRequestPermissions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request Contact Permissions"
                 android:textAllCaps="false"/>
 
         </LinearLayout>

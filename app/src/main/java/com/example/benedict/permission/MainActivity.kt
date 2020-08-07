@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         private val TAG : String = MainActivity::class.java.getSimpleName()
     }
 
+    val contactsProvider : ContactsProvider = ContactsProvider()
+
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cameraCheckPermissions.setOnClickListener(this)
         videoCallCheckPermissions.setOnClickListener(this)
         galleryCheckPermissions.setOnClickListener(this)
+        contactCheckPermissions.setOnClickListener(this)
         //endregion
         //region Request Permission On Click Listener
         allRequestPermissions.setOnClickListener(this)
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         cameraRequestPermissions.setOnClickListener(this)
         videoCallRequestPermissions.setOnClickListener(this)
         galleryRequestPermissions.setOnClickListener(this)
+        contactRequestPermissions.setOnClickListener(this)
         //endregion
         showRationalDialog.setOnClickListener(this)
     }
@@ -42,6 +46,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        //contactsProvider.getContactsList(this@MainActivity)
     }
 
     override fun onClick(view : View) {
@@ -88,6 +93,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     isDenied = { setTextData("Gallery Permissions Denied!") }
                 )
             }
+            contactCheckPermissions -> {
+                ManifestPermission.checkSelfPermission(this,
+                    ManifestPermission.contactPermission,
+                    isGranted = { setTextData("Contact Permissions Granted!") },
+                    isDenied = { setTextData("Contact Permissions Denied!") }
+                )
+            }
             allRequestPermissions -> {
                 ManifestPermission.requestPermissions(this,
                     ManifestPermission.allPermissions,
@@ -122,6 +134,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 ManifestPermission.requestPermissions(this,
                     ManifestPermission.galleryPermissions,
                     ManifestPermission.GALLERY_PERMISSION_CODE
+                )
+            }
+            contactRequestPermissions -> {
+                ManifestPermission.requestPermissions(this,
+                    ManifestPermission.contactPermission,
+                    ManifestPermission.CONTACT_PERMISSION_CODE
                 )
             }
             showRationalDialog -> {
