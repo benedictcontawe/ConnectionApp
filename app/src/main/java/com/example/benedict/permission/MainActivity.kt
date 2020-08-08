@@ -1,6 +1,7 @@
 package com.example.benedict.permission
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -46,7 +47,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        //contactsProvider.getContactsList(this@MainActivity)
+        AsyncTask.execute {
+            contactsProvider.getContactsList(this@MainActivity)
+        }
     }
 
     override fun onClick(view : View) {

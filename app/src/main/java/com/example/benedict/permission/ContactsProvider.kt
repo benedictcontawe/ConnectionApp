@@ -140,7 +140,7 @@ class ContactsProvider {
             cursor?.close()
         }
         contactsList.map {
-            Log.e(TAG, "ID ${it.id} Name ${it.name} Photo ${it.photo} Numbers ${it.numbers} Emails ${it.emails}")
+            Log.i(TAG, "ID ${it.id} Name ${it.name} Photo ${it.photo} Numbers ${it.numbers} Emails ${it.emails}")
         }
         return when {
             contactsList.isEmpty() -> {
