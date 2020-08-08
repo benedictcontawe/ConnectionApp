@@ -32,8 +32,7 @@ class ContactsProvider {
         private final const val PhoneContactID = ContactsContract.CommonDataKinds.Phone.CONTACT_ID
         private final const val PhoneContentItemType = ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
         private final const val EmailContentItemType = ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-        private final val Projection : Array<String> = arrayOf(DisplayName, PhoneNumber, PhonePhoto, MimeType, PhoneType, PhoneLabel, PhoneContactID
-        )
+        private final val Projection : Array<String> = arrayOf(DisplayName, PhoneNumber, PhonePhoto, MimeType, PhoneType, PhoneLabel, PhoneContactID)
     }
 
     private fun getPhoto(cursor : Cursor) : String? {

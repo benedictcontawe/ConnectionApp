@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
             showRationalDialog -> {
-                ManifestPermission.showRationalDialog(this,"Go to App Permission Settings?")
+                ManifestPermission.showRationalDialog(this)
             }
         }
     }

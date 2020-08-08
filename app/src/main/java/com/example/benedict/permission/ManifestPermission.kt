@@ -186,11 +186,11 @@ object ManifestPermission {
         }
     }
 
-    public fun showRationalDialog(activity : Activity, message : String) {
-        Log.d(TAG,"showRationalDialog($activity,$message")
+    public fun showRationalDialog(activity : Activity) {
+        Log.d(TAG,"showRationalDialog($activity")
         val builder = activity.let { AlertDialog.Builder(it) }
         builder.setTitle("Manifest Permissions")
-        builder.setMessage(message)
+        builder.setMessage("Go to App Permission Settings?")
         builder.setPositiveButton("SETTINGS") { dialog, which ->
             dialog.dismiss()
             showAppPermissionSettings(activity)
