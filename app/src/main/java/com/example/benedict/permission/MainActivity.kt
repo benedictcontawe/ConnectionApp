@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onResume() {
         super.onResume()
         AsyncTask.execute {
-            contactsProvider.getContactsList(this@MainActivity)
+            contactsProvider.getContacts(this@MainActivity)
         }
     }
 
