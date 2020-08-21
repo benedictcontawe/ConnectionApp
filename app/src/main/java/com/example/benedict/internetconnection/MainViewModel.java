@@ -62,22 +62,32 @@ public class MainViewModel extends AndroidViewModel {
             @Override
             public void onAvailable(Network network) {
                 super.onAvailable(network);
-                Log.d("MainViewModel","onAvailable(" + network + ")");
+                Log.d(TAG,"onAvailable(" + network + ")");
                 pingAll();
             }
 
             @Override
             public void onUnavailable() {
                 super.onUnavailable();
-                Log.d("MainViewModel","onUnavailable()");
+                Log.d(TAG,"onUnavailable()");
                 pingAll();
             }
 
             @Override
             public void onLost(Network network) {
                 super.onLost(network);
-                Log.d("MainViewModel","onLost(" + network + ")");
+                Log.d(TAG,"onLost(" + network + ")");
                 pingAll();
+            }
+
+            @Override
+            public void onCapabilitiesChanged(Network network,NetworkCapabilities networkCapabilities) {
+                super.onCapabilitiesChanged(network, networkCapabilities);
+                if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
+                    Log.d(TAG,"Serve Higher Quality Content");
+                } else  {
+                    Log.d(TAG,"Serve Lower Quality Content");
+                }
             }
         };
     }
