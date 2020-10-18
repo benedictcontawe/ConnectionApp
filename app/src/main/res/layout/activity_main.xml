@@ -22,4 +22,10 @@
         tools:text="[Ping State]"
         android:textSize="20sp"/>
 
+    <TextView
+        android:id="@+id/txtMetered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="[Meter State]"
+        android:textSize="20sp"/>
 </LinearLayout>

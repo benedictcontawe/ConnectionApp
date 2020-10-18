@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 public class MainActivity extends AppCompatActivity {
 
     private static final int INTERNET_STATE = 0;
-    private TextView txtInternet, txtPing;
+    private TextView txtInternet, txtPing, txtMetered;
     private MainViewModel viewModel;
 
     @Override
@@ -25,13 +26,14 @@ public class MainActivity extends AppCompatActivity {
 
         txtInternet = (TextView) findViewById(R.id.txtInternet);
         txtPing = (TextView) findViewById(R.id.txtPing);
+        txtMetered = (TextView) findViewById(R.id.txtMetered);
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         observeData();
     }
 
     private void observeData() {
-        viewModel.getLiveInternet().observe(this, new Observer<Boolean>() {
+        viewModel.observeLiveInternet().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 requestPermissions(viewModel.checkPermission());
@@ -43,14 +45,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        viewModel.getLivePing().observe(this, new Observer<Boolean>() {
+        viewModel.observeLivePing().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 requestPermissions(viewModel.checkPermission());
                 if (value) {
                     txtPing.setText("Google Successfuly Ping");
+                    txtMetered.setVisibility(View.VISIBLE);
                 } else {
                     txtPing.setText("Google Unreachable ping");
+                    txtMetered.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        viewModel.observeLiveMeter().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (value) {
+                    txtMetered.setText("Network Connection is Metered");
+                } else {
+                    txtMetered.setText("Network Connection is not Metered");
                 }
             }
         });
@@ -72,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         requestPermissions(viewModel.checkPermission());
         try {
             viewModel.registerConnectivity();
-            viewModel.pingAll();
+            viewModel.checkConnections();
         } catch (Exception ex) {
             showAppPermissionSettings();
         }

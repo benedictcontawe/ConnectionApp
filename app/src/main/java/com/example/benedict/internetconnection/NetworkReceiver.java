@@ -8,7 +8,7 @@ import android.util.Log;
 
 class NetworkReceiver extends BroadcastReceiver {
 
-    private static String TAG = NetworkReceiver.class.getSimpleName();
+    private static final String TAG = NetworkReceiver.class.getSimpleName();
     public MainViewModel mainViewModel;
 
     public NetworkReceiver(MainViewModel mainViewModel) {
@@ -20,7 +20,7 @@ class NetworkReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG,"onReceive(" + context + "," + intent + ")");
         if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            mainViewModel.pingAll();
+            mainViewModel.checkConnections();
         }
     }
 }

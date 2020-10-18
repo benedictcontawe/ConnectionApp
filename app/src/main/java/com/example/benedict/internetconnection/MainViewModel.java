@@ -22,12 +22,13 @@ import java.io.IOException;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private static String TAG = MainViewModel.class.getSimpleName();
+    private static final String TAG = MainViewModel.class.getSimpleName();
     private ConnectivityManager connectivityManager;
     private ConnectivityManager.NetworkCallback networkCallback;
-    private NetworkReceiver networkReceiver;
-    private MutableLiveData<Boolean> liveInternet = new MutableLiveData<>();
-    private MutableLiveData<Boolean> livePing = new MutableLiveData<>();
+    private final NetworkReceiver networkReceiver;
+    private final MutableLiveData<Boolean> liveInternet = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> livePing = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> liveMeter = new MutableLiveData<>();
 
     public MainViewModel(Application application) {
         super(application);
@@ -63,21 +64,21 @@ public class MainViewModel extends AndroidViewModel {
             public void onAvailable(Network network) {
                 super.onAvailable(network);
                 Log.d(TAG,"onAvailable(" + network + ")");
-                pingAll();
+                checkConnections();
             }
 
             @Override
             public void onUnavailable() {
                 super.onUnavailable();
                 Log.d(TAG,"onUnavailable()");
-                pingAll();
+                checkConnections();
             }
 
             @Override
             public void onLost(Network network) {
                 super.onLost(network);
                 Log.d(TAG,"onLost(" + network + ")");
-                pingAll();
+                checkConnections();
             }
 
             @Override
@@ -85,8 +86,10 @@ public class MainViewModel extends AndroidViewModel {
                 super.onCapabilitiesChanged(network, networkCapabilities);
                 if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)) {
                     Log.d(TAG,"Serve Higher Quality Content");
+                    liveMeter.postValue(true);
                 } else  {
                     Log.d(TAG,"Serve Lower Quality Content");
+                    liveMeter.postValue(false);
                 }
             }
         };
@@ -101,15 +104,19 @@ public class MainViewModel extends AndroidViewModel {
     }
     //endregion
     //region LiveData Observers
-    public LiveData<Boolean> getLiveInternet() {
+    public LiveData<Boolean> observeLiveInternet() {
         return liveInternet;
     }
 
-    public LiveData<Boolean> getLivePing() {
+    public LiveData<Boolean> observeLivePing() {
         return livePing;
     }
+
+    public LiveData<Boolean> observeLiveMeter() {
+        return liveMeter;
+    }
     //endregion
-    public void pingAll() {
+    public void checkConnections() {
         liveInternet.postValue(hasInternet());
         livePing.postValue(pingGoogle());
     }
