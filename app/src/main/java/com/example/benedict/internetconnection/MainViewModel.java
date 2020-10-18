@@ -126,6 +126,7 @@ public class MainViewModel extends AndroidViewModel {
                 if (info.isConnected())
                     hasMobileData = true;
         }
+        Log.d(TAG,"hasInternet() : " + String.valueOf(hasMobileData || hasWifi));
         return hasMobileData || hasWifi;
     }
 
