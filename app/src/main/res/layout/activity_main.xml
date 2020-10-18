@@ -28,4 +28,5 @@
         android:layout_height="wrap_content"
         tools:text="[Meter State]"
         android:textSize="20sp"/>
+
 </LinearLayout>
