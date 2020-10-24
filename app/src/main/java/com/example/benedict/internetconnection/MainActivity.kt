@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
                     txtMetered.setVisibility(View.INVISIBLE)
                 }
             }
-
         })
 
         viewModel.observeLiveMeter().observe(this@MainActivity, object : Observer<Boolean> {

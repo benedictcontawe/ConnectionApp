@@ -179,7 +179,6 @@ class MainViewModel : AndroidViewModel {
                 getApplication(), Manifest.permission.ACCESS_NETWORK_STATE
             ) == PackageManager.PERMISSION_GRANTED
     }
-
     //endregion
     override fun onCleared() {
         super.onCleared()
