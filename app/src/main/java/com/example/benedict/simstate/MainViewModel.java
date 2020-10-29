@@ -4,7 +4,10 @@ import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.telephony.PhoneStateListener;
+import android.telephony.SubscriptionInfo;
+import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -17,6 +20,8 @@ public class MainViewModel extends AndroidViewModel {
 
     private static String TAG = MainViewModel.class.getSimpleName();
     private TelephonyManager telephonyManager;
+    private SubscriptionManager subscriptionManager ;
+    private SubscriptionInfo subscriptionInfo ;
     private SimChangedListener simChangedListener;
     private MutableLiveData<Boolean> liveSimState = new MutableLiveData<>();
 
@@ -25,7 +30,26 @@ public class MainViewModel extends AndroidViewModel {
         Log.d(TAG,"Constructor");
         telephonyManager = (TelephonyManager) getApplication().getSystemService(Context.TELEPHONY_SERVICE);
         simChangedListener = new SimChangedListener(this);
+        //setSubscription();
     }
+    //region Subscription methods for LOLLIPOP_MR1
+    private void setSubscription() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            subscriptionManager = (SubscriptionManager) getApplication().getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+            subscriptionInfo = subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(0);
+        } else {
+            Log.d(TAG,"setSubscription() else");
+        }
+    }
+
+    private boolean checkSubscriptionInfo() {
+        if (subscriptionInfo != null && !subscriptionInfo.getCountryIso().isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    //endregion
     //region Register Unregister Sim State Detection Callback
     public void registerSimState() {
         telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_SERVICE_STATE|PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -36,9 +60,9 @@ public class MainViewModel extends AndroidViewModel {
     }
     //endregion
     public void checkSimState() {
-        liveSimState.postValue(isSimReady());
+        liveSimState.postValue(isSimMounted());
     }
-    private boolean isSimReady() {
+    private boolean isSimMounted() {
         Log.d(TAG,"checkSimState()");
         boolean isAvailable;
         int simState;
@@ -78,6 +102,52 @@ public class MainViewModel extends AndroidViewModel {
                 break;
         }
         return isAvailable;
+    }
+
+    private int getPhoneType() {
+        switch (telephonyManager.getPhoneType()) {
+            case TelephonyManager.PHONE_TYPE_SIP:
+                Log.d(TAG,"getPhoneType() : TelephonyManager.PHONE_TYPE_SIP");
+                break;
+            case TelephonyManager.PHONE_TYPE_CDMA:
+                Log.d(TAG,"getPhoneType() : TelephonyManager.PHONE_TYPE_CDMA");
+                break;
+            case TelephonyManager.PHONE_TYPE_GSM:
+                Log.d(TAG,"getPhoneType() : TelephonyManager.PHONE_TYPE_GSM");
+                break;
+            case TelephonyManager.PHONE_TYPE_NONE:
+                Log.d(TAG,"getPhoneType() : TelephonyManager.PHONE_TYPE_NONE");
+                break;
+            default:
+                Log.d(TAG,"getPhoneType() : TelephonyManager.PHONE_TYPE_NONE");
+                break;
+        }
+        return telephonyManager.getPhoneType();
+    }
+
+    private boolean isNetworkRoaming() {
+        return telephonyManager.isNetworkRoaming();
+    }
+
+    private String getSoftwareVersion() {
+        if (telephonyManager.getDeviceSoftwareVersion() != null) {
+            return telephonyManager.getDeviceSoftwareVersion();
+        } else  {
+            return "Nil";
+        }
+    }
+
+    private String getVoiceMailNumber() {
+        if (telephonyManager.getVoiceMailNumber() != null) {
+            return telephonyManager.getVoiceMailNumber();
+        } else  {
+            return "Nil";
+        }
+    }
+
+    private String getSimNumber() {
+        return telephonyManager.getLine1Number();
+        //return subscriptionInfo.getNumber();
     }
     //region LiveData Observers
     public LiveData<Boolean> getLiveSimState() {
