@@ -149,8 +149,30 @@ public class MainViewModel extends AndroidViewModel {
         return telephonyManager.getLine1Number();
         //return subscriptionInfo.getNumber();
     }
+
+    private String getIMSI() {
+        return telephonyManager.getSubscriberId();
+    }
+
+    private String getICCID() {
+        return telephonyManager.getSimSerialNumber();
+        //return subscriptionInfo.getIccId();
+    }
+
+    private String getISOCode() {
+        return telephonyManager.getNetworkCountryIso();
+        //return subscriptionInfo.getCountryIso();
+    }
+
+    private String getSimCountryIso() {
+        return telephonyManager.getSimCountryIso();
+    }
+
+    private String getNetworkCountryIso() {
+        return telephonyManager.getNetworkCountryIso();
+    }
     //region LiveData Observers
-    public LiveData<Boolean> getLiveSimState() {
+    public LiveData<Boolean> observeLiveSimState() {
         return liveSimState;
     }
     //endregion

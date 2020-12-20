@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeData() {
-        viewModel.getLiveSimState().observe(this, new Observer<Boolean>() {
+        viewModel.observeLiveSimState().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean value) {
                 if (value) {
@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         viewModel.unregisterSimState();
-        viewModel.checkSimState();
     }
 
     @Override
