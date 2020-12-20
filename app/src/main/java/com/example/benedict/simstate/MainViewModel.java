@@ -62,6 +62,7 @@ public class MainViewModel extends AndroidViewModel {
     public void checkSimState() {
         liveSimState.postValue(isSimMounted());
     }
+    //region Telephony Manager Methods
     private boolean isSimMounted() {
         Log.d(TAG,"checkSimState()");
         boolean isAvailable;
@@ -171,6 +172,7 @@ public class MainViewModel extends AndroidViewModel {
     private String getNetworkCountryIso() {
         return telephonyManager.getNetworkCountryIso();
     }
+    //endregion
     //region LiveData Observers
     public LiveData<Boolean> observeLiveSimState() {
         return liveSimState;
