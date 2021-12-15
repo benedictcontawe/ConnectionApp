@@ -31,9 +31,9 @@ public class MainActivity extends Activity {
         }
 
         if (pingGoogle()) {
-            txtPing.setText("Google Successfuly Ping");
+            txtPing.setText("Google Successfully Ping");
         } else {
-            txtPing.setText("Unreachable ping");
+            txtPing.setText("Google Unreachable ping");
         }
     }
 
