@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(Boolean value) {
                 requestPermissions(viewModel.checkPermission());
                 if (value) {
-                    txtPing.setText("Google Successfuly Ping");
+                    txtPing.setText("Google Successfully Ping");
                     txtMetered.setVisibility(View.VISIBLE);
                 } else {
                     txtPing.setText("Google Unreachable ping");
