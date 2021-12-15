@@ -1,0 +1,202 @@
+Index: app/src/main/java/com/example/benedict/simstate/MainViewModel.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.benedict.simstate;\r\n\r\nimport android.Manifest;\r\nimport android.app.Application;\r\nimport android.content.Context;\r\nimport android.content.pm.PackageManager;\r\nimport android.os.Build;\r\nimport android.telephony.PhoneStateListener;\r\nimport android.telephony.SubscriptionInfo;\r\nimport android.telephony.SubscriptionManager;\r\nimport android.telephony.TelephonyManager;\r\nimport android.util.Log;\r\n\r\nimport androidx.core.app.ActivityCompat;\r\nimport androidx.lifecycle.AndroidViewModel;\r\nimport androidx.lifecycle.LiveData;\r\nimport androidx.lifecycle.MutableLiveData;\r\n\r\npublic class MainViewModel extends AndroidViewModel {\r\n\r\n    private static String TAG = MainViewModel.class.getSimpleName();\r\n    private TelephonyManager telephonyManager;\r\n    private SubscriptionManager subscriptionManager ;\r\n    private SubscriptionInfo subscriptionInfo ;\r\n    private SimChangedListener simChangedListener;\r\n    private MutableLiveData<Boolean> liveSimState = new MutableLiveData<>();\r\n\r\n    public MainViewModel(Application application) {\r\n        super(application);\r\n        Log.d(TAG,\"Constructor\");\r\n        telephonyManager = (TelephonyManager) getApplication().getSystemService(Context.TELEPHONY_SERVICE);\r\n        simChangedListener = new SimChangedListener(this);\r\n        //setSubscription();\r\n    }\r\n    //region Subscription methods for LOLLIPOP_MR1\r\n    private void setSubscription() {\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {\r\n            subscriptionManager = (SubscriptionManager) getApplication().getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);\r\n            subscriptionInfo = subscriptionManager.getActiveSubscriptionInfoForSimSlotIndex(0);\r\n        } else {\r\n            Log.d(TAG,\"setSubscription() else\");\r\n        }\r\n    }\r\n\r\n    private boolean checkSubscriptionInfo() {\r\n        if (subscriptionInfo != null && !subscriptionInfo.getCountryIso().isEmpty()) {\r\n            return true;\r\n        } else {\r\n            return false;\r\n        }\r\n    }\r\n    //endregion\r\n    //region Register Unregister Sim State Detection Callback\r\n    public void registerSimState() {\r\n        telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_SERVICE_STATE|PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);\r\n    }\r\n\r\n    public void unregisterSimState() {\r\n        telephonyManager.listen(simChangedListener,PhoneStateListener.LISTEN_NONE);\r\n    }\r\n    //endregion\r\n    public void checkSimState() {\r\n        liveSimState.postValue(isSimMounted());\r\n    }\r\n    //region Telephony Manager Methods\r\n    private boolean isSimMounted() {\r\n        Log.d(TAG,\"checkSimState()\");\r\n        boolean isAvailable;\r\n        int simState;\r\n        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {\r\n            simState = telephonyManager.getSimState(0);\r\n        } else {\r\n            simState = telephonyManager.getSimState();\r\n        }\r\n        switch (simState) {\r\n            case TelephonyManager.SIM_STATE_READY:\r\n                isAvailable = true;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_READY\");\r\n                break;\r\n            case TelephonyManager.SIM_STATE_ABSENT: //SimState = “No Sim Found!”;\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_ABSENT\");\r\n                break;\r\n            case TelephonyManager.SIM_STATE_NETWORK_LOCKED: //SimState = “Network Locked!”;\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_NETWORK_LOCKED\");\r\n                break;\r\n            case TelephonyManager.SIM_STATE_PIN_REQUIRED: //SimState = “PIN Required to access SIM!”;\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_PIN_REQUIRED\");\r\n                break;\r\n            case TelephonyManager.SIM_STATE_PUK_REQUIRED: //SimState = “PUK Required to access SIM!”; // Personal Unblocking Code\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_PUK_REQUIRED\");\r\n                break;\r\n            case TelephonyManager.SIM_STATE_UNKNOWN: //SimState = “Unknown SIM State!”;\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.SIM_STATE_UNKNOWN\");\r\n                break;\r\n            default:\r\n                isAvailable = false;\r\n                Log.d(TAG,\"TelephonyManager.default\");\r\n                break;\r\n        }\r\n        return isAvailable;\r\n    }\r\n\r\n    private int getPhoneType() {\r\n        switch (telephonyManager.getPhoneType()) {\r\n            case TelephonyManager.PHONE_TYPE_SIP:\r\n                Log.d(TAG,\"getPhoneType() : TelephonyManager.PHONE_TYPE_SIP\");\r\n                break;\r\n            case TelephonyManager.PHONE_TYPE_CDMA:\r\n                Log.d(TAG,\"getPhoneType() : TelephonyManager.PHONE_TYPE_CDMA\");\r\n                break;\r\n            case TelephonyManager.PHONE_TYPE_GSM:\r\n                Log.d(TAG,\"getPhoneType() : TelephonyManager.PHONE_TYPE_GSM\");\r\n                break;\r\n            case TelephonyManager.PHONE_TYPE_NONE:\r\n                Log.d(TAG,\"getPhoneType() : TelephonyManager.PHONE_TYPE_NONE\");\r\n                break;\r\n            default:\r\n                Log.d(TAG,\"getPhoneType() : TelephonyManager.PHONE_TYPE_NONE\");\r\n                break;\r\n        }\r\n        return telephonyManager.getPhoneType();\r\n    }\r\n\r\n    private boolean isNetworkRoaming() {\r\n        return telephonyManager.isNetworkRoaming();\r\n    }\r\n\r\n    private String getSoftwareVersion() {\r\n        if (telephonyManager.getDeviceSoftwareVersion() != null) {\r\n            return telephonyManager.getDeviceSoftwareVersion();\r\n        } else  {\r\n            return \"Nil\";\r\n        }\r\n    }\r\n\r\n    private String getVoiceMailNumber() {\r\n        if (telephonyManager.getVoiceMailNumber() != null) {\r\n            return telephonyManager.getVoiceMailNumber();\r\n        } else  {\r\n            return \"Nil\";\r\n        }\r\n    }\r\n\r\n    private String getSimNumber() {\r\n        return telephonyManager.getLine1Number();\r\n        //return subscriptionInfo.getNumber();\r\n    }\r\n\r\n    private String getIMSI() {\r\n        return telephonyManager.getSubscriberId();\r\n    }\r\n\r\n    private String getICCID() {\r\n        return telephonyManager.getSimSerialNumber();\r\n        //return subscriptionInfo.getIccId();\r\n    }\r\n\r\n    private String getISOCode() {\r\n        return telephonyManager.getNetworkCountryIso();\r\n        //return subscriptionInfo.getCountryIso();\r\n    }\r\n\r\n    private String getSimCountryIso() {\r\n        return telephonyManager.getSimCountryIso();\r\n    }\r\n\r\n    private String getNetworkCountryIso() {\r\n        return telephonyManager.getNetworkCountryIso();\r\n    }\r\n    //endregion\r\n    //region LiveData Observers\r\n    public LiveData<Boolean> observeLiveSimState() {\r\n        return liveSimState;\r\n    }\r\n    //endregion\r\n    //region Manifest Permissions\r\n    public boolean checkPermission() {\r\n        boolean value = false;\r\n        Log.d(TAG,\"checkPermission()\");\r\n        if (isReadPhoneStatePermissionGranted()) {\r\n            Log.d(TAG,\"isReadPhoneStatePermissionGranted()\");\r\n            value = true;\r\n        }\r\n        return value;\r\n    }\r\n\r\n    private boolean isReadPhoneStatePermissionGranted() {\r\n        return ActivityCompat\r\n                .checkSelfPermission(\r\n                        getApplication(),\r\n                        Manifest.permission.READ_PHONE_STATE\r\n                ) == PackageManager.PERMISSION_GRANTED;\r\n    }\r\n    //endregion\r\n    @Override\r\n    protected void onCleared() {\r\n        super.onCleared();\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/com/example/benedict/simstate/MainViewModel.java b/app/src/main/java/com/example/benedict/simstate/MainViewModel.java
+--- a/app/src/main/java/com/example/benedict/simstate/MainViewModel.java	
++++ b/app/src/main/java/com/example/benedict/simstate/MainViewModel.java	
+@@ -1,9 +1,7 @@
+ package com.example.benedict.simstate;
+ 
+-import android.Manifest;
+ import android.app.Application;
+ import android.content.Context;
+-import android.content.pm.PackageManager;
+ import android.os.Build;
+ import android.telephony.PhoneStateListener;
+ import android.telephony.SubscriptionInfo;
+@@ -11,19 +9,18 @@
+ import android.telephony.TelephonyManager;
+ import android.util.Log;
+ 
+-import androidx.core.app.ActivityCompat;
+ import androidx.lifecycle.AndroidViewModel;
+ import androidx.lifecycle.LiveData;
+ import androidx.lifecycle.MutableLiveData;
+ 
+ public class MainViewModel extends AndroidViewModel {
+ 
+-    private static String TAG = MainViewModel.class.getSimpleName();
+-    private TelephonyManager telephonyManager;
++    private static final String TAG = MainViewModel.class.getSimpleName();
++    private final TelephonyManager telephonyManager;
+     private SubscriptionManager subscriptionManager ;
+-    private SubscriptionInfo subscriptionInfo ;
+-    private SimChangedListener simChangedListener;
+-    private MutableLiveData<Boolean> liveSimState = new MutableLiveData<>();
++    private SubscriptionInfo subscriptionInfo;
++    private final SimChangedListener simChangedListener;
++    private final MutableLiveData<Boolean> liveSimState = new MutableLiveData<>();
+ 
+     public MainViewModel(Application application) {
+         super(application);
+@@ -177,25 +174,6 @@
+     public LiveData<Boolean> observeLiveSimState() {
+         return liveSimState;
+     }
+-    //endregion
+-    //region Manifest Permissions
+-    public boolean checkPermission() {
+-        boolean value = false;
+-        Log.d(TAG,"checkPermission()");
+-        if (isReadPhoneStatePermissionGranted()) {
+-            Log.d(TAG,"isReadPhoneStatePermissionGranted()");
+-            value = true;
+-        }
+-        return value;
+-    }
+-
+-    private boolean isReadPhoneStatePermissionGranted() {
+-        return ActivityCompat
+-                .checkSelfPermission(
+-                        getApplication(),
+-                        Manifest.permission.READ_PHONE_STATE
+-                ) == PackageManager.PERMISSION_GRANTED;
+-    }
+     //endregion
+     @Override
+     protected void onCleared() {
+Index: app/src/main/java/com/example/benedict/simstate/MainActivity.java
+===================================================================
+diff --git a/app/src/main/java/com/example/benedict/simstate/MainActivity.java b/app/src/main/java/com/example/benedict/simstate/MainActivity.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/benedict/simstate/MainActivity.java	
++++ /dev/null	
+@@ -1,71 +0,0 @@
+-package com.example.benedict.simstate;
+-
+-import android.Manifest;
+-import android.os.Bundle;
+-import android.widget.TextView;
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.core.app.ActivityCompat;
+-import androidx.lifecycle.Observer;
+-import androidx.lifecycle.ViewModelProvider;
+-
+-public class MainActivity extends AppCompatActivity {
+-
+-    private static final int PHONE_STATE = 0;
+-    private TextView txtSim;
+-    private MainViewModel viewModel;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_main);
+-
+-        txtSim = (TextView) findViewById(R.id.txtSim);
+-
+-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+-        observeData();
+-    }
+-
+-    private void observeData() {
+-        viewModel.observeLiveSimState().observe(this, new Observer<Boolean>() {
+-            @Override
+-            public void onChanged(Boolean value) {
+-                if (value) {
+-                    txtSim.setText("Sim is inserted");
+-                } else {
+-                    txtSim.setText("Sim is not inserted");
+-                }
+-            }
+-        });
+-    }
+-
+-    @Override
+-    protected void onPause() {
+-        super.onPause();
+-        viewModel.unregisterSimState();
+-    }
+-
+-    @Override
+-    protected void onResume() {
+-        super.onResume();
+-        requestPermissions(viewModel.checkPermission());
+-        viewModel.checkSimState();
+-        viewModel.registerSimState();
+-    }
+-
+-    private void requestPermissions(boolean permissionGranted) {
+-        if (!permissionGranted) {
+-            ActivityCompat.requestPermissions(
+-                    this,
+-                    new String[]{
+-                            Manifest.permission.READ_PHONE_STATE
+-                    },
+-                    PHONE_STATE
+-            );
+-        }
+-    }
+-
+-    @Override
+-    protected void onDestroy() {
+-        super.onDestroy();
+-    }
+-}
+Index: app/src/main/java/com/example/benedict/simstate/SimChangedListener.java
+===================================================================
+diff --git a/app/src/main/java/com/example/benedict/simstate/SimChangedListener.java b/app/src/main/java/com/example/benedict/simstate/SimChangedListener.java
+deleted file mode 100644
+--- a/app/src/main/java/com/example/benedict/simstate/SimChangedListener.java	
++++ /dev/null	
+@@ -1,31 +0,0 @@
+-package com.example.benedict.simstate;
+-
+-import android.telephony.PhoneStateListener;
+-import android.telephony.ServiceState;
+-import android.telephony.SignalStrength;
+-import android.util.Log;
+-
+-public class SimChangedListener extends PhoneStateListener {
+-
+-    private static String TAG = SimChangedListener.class.getSimpleName();
+-    public MainViewModel mainViewModel;
+-
+-    public SimChangedListener(MainViewModel mainViewModel) {
+-        Log.d(TAG,"constructor(" + mainViewModel + ")");
+-        this.mainViewModel = mainViewModel;
+-    }
+-
+-    @Override
+-    public void onServiceStateChanged(ServiceState serviceState) {
+-        super.onServiceStateChanged(serviceState);
+-        Log.d(TAG,"onServiceStateChanged(" + serviceState + ")");
+-        mainViewModel.checkSimState();
+-    }
+-
+-    @Override
+-    public void onSignalStrengthsChanged(SignalStrength signalStrength) {
+-        super.onSignalStrengthsChanged(signalStrength);
+-        Log.d(TAG,"onSignalStrengthsChanged(" + signalStrength + ")");
+-        mainViewModel.checkSimState();
+-    }
+-}
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"CompilerConfiguration\">\r\n    <bytecodeTargetLevel target=\"1.8\" />\r\n  </component>\r\n</project>
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	
++++ b/.idea/compiler.xml	
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="CompilerConfiguration">
+-    <bytecodeTargetLevel target="1.8" />
++    <bytecodeTargetLevel target="11" />
+   </component>
+ </project>
+\ No newline at end of file
