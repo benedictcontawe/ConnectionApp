@@ -1,4 +1,4 @@
-package com.example.benedict.internetconnection
+package com.example.benedict.webviewconnection
 
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.benedict.internetconnection.databinding.MainBinder
+import com.example.benedict.webviewconnection.databinding.MainBinder
 
 public class MainActivity : AppCompatActivity(), OnClickListener {
 

@@ -7,7 +7,7 @@
     <data class="MainBinder">
         <variable
             name="viewModel"
-            type="com.example.benedict.internetconnection.MainViewModel" />
+            type="com.example.benedict.webviewconnection.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context="com.example.benedict.internetconnection.MainActivity">
+        tools:context="com.example.benedict.webviewconnection.MainActivity">
         <!--region Guide lines-->
         <!--region Vertical Guide lines-->
         <androidx.constraintlayout.widget.Guideline
