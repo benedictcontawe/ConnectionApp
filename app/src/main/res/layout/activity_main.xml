@@ -11,10 +11,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         tools:context="com.example.benedict.webviewconnection.MainActivity">
         <!--region Guide lines-->
         <!--region Vertical Guide lines-->
