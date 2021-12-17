@@ -8,13 +8,13 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
-public class MainViewModel : AndroidViewModel{
-
-    private val webAppInterface: WebAppInterface
+public class MainViewModel : AndroidViewModel {
 
     companion object {
         public val TAG = MainViewModel::class.java.getSimpleName()
     }
+
+    private val webAppInterface: WebAppInterface
 
     constructor(application : Application) : super(application) {
         webAppInterface = WebAppInterface(application)
