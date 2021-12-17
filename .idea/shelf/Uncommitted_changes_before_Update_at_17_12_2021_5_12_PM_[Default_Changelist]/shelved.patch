@@ -1,0 +1,119 @@
+Index: app/src/main/java/com/example/benedict/internetconnection/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/benedict/internetconnection/MainActivity.kt b/app/src/main/java/com/example/benedict/internetconnection/MainActivity.kt
+new file mode 100644
+--- /dev/null	(date 1639732276906)
++++ b/app/src/main/java/com/example/benedict/internetconnection/MainActivity.kt	(date 1639732276906)
+@@ -0,0 +1,32 @@
++package com.example.benedict.internetconnection
++
++import android.os.Bundle
++import android.view.View
++import androidx.appcompat.app.AppCompatActivity
++
++public class MainActivity : AppCompatActivity, View.OnClickListener {
++
++    companion object {
++        public val TAG = MainActivity::class.java.getSimpleName()
++    }
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++        setContentView(R.layout.activity_main)
++
++        setWebView()
++        observeData()
++    }
++
++    private fun setWebView() {
++
++    }
++
++    private fun observeData() {
++
++    }
++
++    override fun onClick(view : View?) {
++
++    }
++}
+\ No newline at end of file
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"RemoteRepositoriesConfiguration\">\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"central\" />\r\n      <option name=\"name\" value=\"Maven Central repository\" />\r\n      <option name=\"url\" value=\"https://repo1.maven.org/maven2\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"jboss.community\" />\r\n      <option name=\"name\" value=\"JBoss Community repository\" />\r\n      <option name=\"url\" value=\"https://repository.jboss.org/nexus/content/repositories/public/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"BintrayJCenter\" />\r\n      <option name=\"name\" value=\"BintrayJCenter\" />\r\n      <option name=\"url\" value=\"https://jcenter.bintray.com/\" />\r\n    </remote-repository>\r\n    <remote-repository>\r\n      <option name=\"id\" value=\"Google\" />\r\n      <option name=\"name\" value=\"Google\" />\r\n      <option name=\"url\" value=\"https://dl.google.com/dl/android/maven2/\" />\r\n    </remote-repository>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+--- a/.idea/jarRepositories.xml	(revision aa78b74505a7406a00507c39e025845a1d0517da)
++++ b/.idea/jarRepositories.xml	(date 1639728895399)
+@@ -21,5 +21,10 @@
+       <option name="name" value="Google" />
+       <option name="url" value="https://dl.google.com/dl/android/maven2/" />
+     </remote-repository>
++    <remote-repository>
++      <option name="id" value="MavenRepo" />
++      <option name="name" value="MavenRepo" />
++      <option name="url" value="https://repo.maven.apache.org/maven2/" />
++    </remote-repository>
+   </component>
+ </project>
+\ No newline at end of file
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\r\n\r\nandroid {\r\n    compileSdkVersion 29\r\n    defaultConfig {\r\n        applicationId \"com.example.benedict.bluetootharduino\"\r\n        minSdkVersion 16\r\n        targetSdkVersion 29\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n        testInstrumentationRunner \"android.support.test.runner.AndroidJUnitRunner\"\r\n    }\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation fileTree(dir: 'libs', include: ['*.jar'])\r\n    //region Android UI Layout Library and backward-compatible Library(Legacy)\r\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\r\n    implementation 'androidx.appcompat:appcompat:1.1.0'\r\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\r\n    //endregion\r\n    //region Life Cycle Components\r\n    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'\r\n    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0'\r\n    //endregion\r\n    //region Android Unit Test and U.I. Test Library\r\n    testImplementation 'junit:junit:4.12'\r\n    androidTestImplementation 'androidx.test:runner:1.2.0'\r\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\r\n    //endregion\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision aa78b74505a7406a00507c39e025845a1d0517da)
++++ b/app/build.gradle	(date 1639725573846)
+@@ -1,4 +1,5 @@
+ apply plugin: 'com.android.application'
++apply plugin: 'kotlin-android'
+ 
+ android {
+     compileSdkVersion 29
+@@ -33,5 +34,11 @@
+     testImplementation 'junit:junit:4.12'
+     androidTestImplementation 'androidx.test:runner:1.2.0'
+     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
++    implementation "androidx.core:core-ktx:+"
++    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
++    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+     //endregion
++}
++repositories {
++    mavenCentral()
+ }
+\ No newline at end of file
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\n\r\nbuildscript {\r\n    repositories {\r\n        jcenter()\r\n        google()\r\n    }\r\n    dependencies {\r\n        classpath 'com.android.tools.build:gradle:4.1.0'\r\n\r\n        // NOTE: Do not place your application dependencies here; they belong\r\n        // in the individual module build.gradle files\r\n    }\r\n}\r\n\r\nallprojects {\r\n    repositories {\r\n        jcenter()\r\n        google()\r\n    }\r\n}\r\n\r\ntask clean(type: Delete) {\r\n    delete rootProject.buildDir\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle b/build.gradle
+--- a/build.gradle	(revision aa78b74505a7406a00507c39e025845a1d0517da)
++++ b/build.gradle	(date 1639725573872)
+@@ -1,12 +1,14 @@
+ // Top-level build file where you can add configuration options common to all sub-projects/modules.
+ 
+ buildscript {
++    ext.kotlin_version = '1.6.10'
+     repositories {
+         jcenter()
+         google()
+     }
+     dependencies {
+         classpath 'com.android.tools.build:gradle:4.1.0'
++        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+ 
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
