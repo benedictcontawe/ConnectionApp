@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
-    public static String TAG = MainActivity.class.getSimpleName();
+    public final static String TAG = MainActivity.class.getSimpleName();
     private Button btnShowAlert, btnSendToWeb;
     private EditText edtTextToWeb;
     private TextView txtFromWeb;
