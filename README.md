@@ -9,3 +9,5 @@
 - [Javascript Interface for Android and Javascript communication](https://www.codexpedia.com/android/javascript-interface-for-android-and-javascript-communication/)
 
 - [Var, Let, and Const – What's the Difference?](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/)
+
+- [An Introduction to Local Storage with JavaScript](https://www.youtube.com/watch?v=T9GWHFDcELQ)
