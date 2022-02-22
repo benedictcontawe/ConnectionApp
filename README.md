@@ -12,4 +12,4 @@
 
 - [An Introduction to Local Storage with JavaScript](https://www.youtube.com/watch?v=T9GWHFDcELQ)
 
-- [JavaScript Cookies vs Local Storage vs Session](https://www.youtube.com/watch?v=GihQAC1I39Q)
+- [Solve - split is not a function Error in JavaScript](https://bobbyhadz.com/blog/javascript-typeerror-string-split-is-not-a-function)
