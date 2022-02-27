@@ -30,8 +30,8 @@ public class MainActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun setWebView() {
-        viewModel.setWebContentsDebuggingEnabled(applicationInfo)
-        val webSettings: WebSettings = binding.webView.getSettings()
+        viewModel.setWebContentsDebuggingEnabled(getApplicationInfo())
+        //val webSettings: WebSettings = binding.webView.getSettings()
         binding.webView.getSettings().setJavaScriptEnabled(true)
         binding.webView.addJavascriptInterface(viewModel.getWebAppInterface(), WebAppInterface.TAG)
         binding.webView.setWebViewClient(object : WebViewClient() {
