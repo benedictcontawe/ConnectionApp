@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">BluetoothArduino</string>
-    <!--<string name="app_name">Locker</string>-->
+    <string name="app_name">NFCApp</string>
 </resources>
