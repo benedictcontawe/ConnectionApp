@@ -17,10 +17,11 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private TextView mTextView; //ECP 2017-01-16
     private MainViewModel viewModel;
     NfcAdapter nfcAdapter;
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         // enabling foreground dispatch for getting intent from NFC event:
         if (nfcAdapter != null)
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, new IntentFilter[]{filter}, viewModel.techList);
+        Log.d(ContentValues.TAG,"getIntent().getAction() " + getIntent().getAction() + " getIntent().getExtras()" + getIntent().getExtras());
+        if (getIntent() != null)
+            onNewIntent(getIntent());
     }
 
     @Override
@@ -67,10 +71,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ContentValues.TAG,"intent.getAction() " + intent.getAction() + " intent.getExtras()" + intent.getExtras());
         if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             Log.d(ContentValues.TAG, "onNewIntent " + NfcAdapter.ACTION_TAG_DISCOVERED);
-            mTextView.setText( "NFC Tag\n" + viewModel.ByteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)));
+            mTextView.setText(viewModel.getByteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)));
             Parcelable tagN = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            if (tagN != null) {
-                Log.d(ContentValues.TAG, "Parcelable OK");
+            if (tagN != null) { Log.d(ContentValues.TAG, "Parcelable OK");
                 NdefMessage[] msgs;
                 byte[] empty = new byte[0];
                 byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
@@ -80,21 +83,19 @@ public class MainActivity extends AppCompatActivity {
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };
-            }
-            else {
+                Log.d(ContentValues.TAG,"Parcelable " + Arrays.toString(msgs));
+            } else {
                 Log.d(ContentValues.TAG, "Parcelable NULL");
             }
             Parcelable[] messages1 = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             if (messages1 != null) {
                 Log.d(ContentValues.TAG, "Found " + messages1.length + " NDEF messages");
-            }
-            else {
+            } else {
                 Log.d(ContentValues.TAG, "Not EXTRA_NDEF_MESSAGES");
             }
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             Ndef ndef = Ndef.get(tag);
-            if(ndef != null) {
-                Log.d(ContentValues.TAG, "onNewIntent: NfcAdapter.EXTRA_TAG");
+            if(ndef != null) { Log.d(ContentValues.TAG, "onNewIntent: NfcAdapter.EXTRA_TAG");
                 Parcelable[] messages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
                 if (messages != null) {
                     Log.d(ContentValues.TAG, "Found " + messages.length + " NDEF messages");

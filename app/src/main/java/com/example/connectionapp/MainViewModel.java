@@ -1,6 +1,7 @@
 package com.example.connectionapp;
 
 import android.content.ContentValues;
+import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
@@ -38,7 +39,7 @@ public class MainViewModel extends ViewModel {
         }
     };
 
-    public String dumpTagData(Parcelable p) { Log.d(TAG,"dumpTagData()");
+    public String dumpTagData(Parcelable p) { Log.d(TAG,"dumpTagData(" + p + ")");
         StringBuilder sb = new StringBuilder();
         Tag tag = (Tag) p;
         byte[] id = tag.getId();
@@ -100,10 +101,11 @@ public class MainViewModel extends ViewModel {
             }
         }
         Log.d(TAG, "Datum: " + sb);
+        Log.d(ContentValues.TAG, "dumpTagData Return \n" + sb);
         return sb.toString();
     }
 
-    public String ByteArrayToHexString(byte [] inarray) { Log.d(ContentValues.TAG, "ByteArrayToHexString " + Arrays.toString(inarray));
+    private String ByteArrayToHexString(byte [] inarray) { Log.d(ContentValues.TAG, "ByteArrayToHexString " + Arrays.toString(inarray));
         int i, j, in;
         String [] hex = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
         String out = "";
@@ -120,9 +122,16 @@ public class MainViewModel extends ViewModel {
         return out;
     }
 
+    public String getByteArrayToHexString(byte [] inarray) { Log.d(TAG, "getByteArrayToHexString " + Arrays.toString(inarray));
+        Log.d(ContentValues.TAG, "getByteArrayToHexString " + Arrays.toString(inarray));
+        Log.d(ContentValues.TAG, "getByteArrayToHexString Return " + ByteArrayToHexString(inarray));
+        return "NFC Tag\n" + ByteArrayToHexString(inarray);
+    }
+
     public String getDateTimeNow(String data) { Log.d(TAG,"getDateTime(" + data + ")");
         DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
         Date now = new Date();
+        Log.d(ContentValues.TAG,"getDateTimeNow() Return \n" + TIME_FORMAT.format(now) + '\n' + data);
         return TIME_FORMAT.format(now) + '\n' + data;
     }
 
