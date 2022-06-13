@@ -1,7 +1,6 @@
 package com.example.connectionapp;
 
 import android.content.ContentValues;
-import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
@@ -25,8 +24,7 @@ public class MainViewModel extends ViewModel {
 
     private final static String TAG = MainViewModel.class.getSimpleName();
     private final static String prefix = "android.nfc.tech.";
-
-    // list of NFC technologies detected:
+    //region list of NFC technologies detected:
     public final String[][] techList = new String[][] {
         new String[] {
             NfcA.class.getName(),
@@ -38,7 +36,7 @@ public class MainViewModel extends ViewModel {
             MifareUltralight.class.getName(), Ndef.class.getName()
         }
     };
-
+    //endregion
     public String dumpTagData(Parcelable p) { Log.d(TAG,"dumpTagData(" + p + ")");
         StringBuilder sb = new StringBuilder();
         Tag tag = (Tag) p;

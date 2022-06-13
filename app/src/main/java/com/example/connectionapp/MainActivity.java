@@ -2,7 +2,6 @@ package com.example.connectionapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
-import android.view.Menu;
 import android.widget.TextView;
 import java.util.Arrays;
 
@@ -33,12 +31,6 @@ public class MainActivity extends AppCompatActivity {
         mTextView = (TextView) findViewById(R.id.textView_explanation);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) { Log.d(TAG,"onCreateOptionsMenu()");
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return menu == null ? true : super.onCreateOptionsMenu(menu);
     }
 
     @Override
