@@ -186,6 +186,20 @@ object ManifestPermission {
         }
     }
 
+    fun checkPermissionsResult(activity : Activity, selectedRequestCode : Int, requestCode : Int, permissions : Array<String>, grantResults : IntArray,isGranted : () -> Unit, isNeverAskAgain : () -> Unit = {}, isDenied : () -> Unit) {
+        when {
+            grantResults.all { results -> selectedRequestCode == requestCode && results ==  PackageManager.PERMISSION_GRANTED } -> { Log.d(TAG,"isGranted()")
+                isGranted()
+            }
+            permissions.filter { permission -> selectedRequestCode == requestCode && ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED }.none() -> { Log.d(TAG,"isNeverAskAgain()")
+                isNeverAskAgain()
+            }
+            grantResults.filter { results -> selectedRequestCode == requestCode && results ==  PackageManager.PERMISSION_DENIED}.isNotEmpty() -> { Log.d(TAG,"isDenied()")
+                isDenied()
+            }
+        }
+    }
+
     public fun showRationalDialog(activity : Activity, message : String) {
         Log.d(TAG,"showRationalDialog($activity,$message")
         val builder = activity.let { AlertDialog.Builder(it) }

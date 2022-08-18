@@ -18,24 +18,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         //region Check Permission On Click Listener
-        allCheckPermissions.setOnClickListener(this)
-        telephonyCheckPermissions.setOnClickListener(this)
-        microphoneCheckPermissions.setOnClickListener(this)
-        cameraCheckPermissions.setOnClickListener(this)
-        videoCallCheckPermissions.setOnClickListener(this)
-        galleryCheckPermissions.setOnClickListener(this)
-        contactCheckPermissions.setOnClickListener(this)
+        allCheckPermissions.setOnClickListener(this@MainActivity)
+        telephonyCheckPermissions.setOnClickListener(this@MainActivity)
+        microphoneCheckPermissions.setOnClickListener(this@MainActivity)
+        cameraCheckPermissions.setOnClickListener(this@MainActivity)
+        videoCallCheckPermissions.setOnClickListener(this@MainActivity)
+        galleryCheckPermissions.setOnClickListener(this@MainActivity)
+        contactCheckPermissions.setOnClickListener(this@MainActivity)
         //endregion
         //region Request Permission On Click Listener
-        allRequestPermissions.setOnClickListener(this)
-        telephonyRequestPermissions.setOnClickListener(this)
-        microphoneRequestPermissions.setOnClickListener(this)
-        cameraRequestPermissions.setOnClickListener(this)
-        videoCallRequestPermissions.setOnClickListener(this)
-        galleryRequestPermissions.setOnClickListener(this)
-        contactRequestPermissions.setOnClickListener(this)
+        allRequestPermissions.setOnClickListener(this@MainActivity)
+        telephonyRequestPermissions.setOnClickListener(this@MainActivity)
+        microphoneRequestPermissions.setOnClickListener(this@MainActivity)
+        cameraRequestPermissions.setOnClickListener(this@MainActivity)
+        videoCallRequestPermissions.setOnClickListener(this@MainActivity)
+        galleryRequestPermissions.setOnClickListener(this@MainActivity)
+        contactRequestPermissions.setOnClickListener(this@MainActivity)
         //endregion
-        showRationalDialog.setOnClickListener(this)
+        showRationalDialog.setOnClickListener(this@MainActivity)
     }
 
     override fun onPause() {
@@ -221,6 +221,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         )
+        ManifestPermission.checkPermissionsResult(this@MainActivity, ManifestPermission.ALL_PERMISSION_CODE, requestCode, permissions, grantResults,
+            isNeverAskAgain = {
+                Log.d("PermissionsResult","checkPermissionsResult with Selected Request Code, isNeverAskAgain")
+            }, isDenied = {
+                Log.d("PermissionsResult","checkPermissionsResult with Selected Request Code, isDenied")
+            }, isGranted = {
+                Log.d("PermissionsResult","checkPermissionsResult with Selected Request Code, isGranted")
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
