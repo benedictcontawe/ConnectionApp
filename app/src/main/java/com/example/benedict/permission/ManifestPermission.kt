@@ -13,10 +13,11 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-object ManifestPermission {
+public object ManifestPermission {
 
-    private val TAG = ManifestPermission::class.java.simpleName
+    private val TAG = ManifestPermission::class.java.getSimpleName()
 
+    const val NIL_PERMISSION_CODE = 0
     const val SETTINGS_PERMISSION_CODE = 1000
     const val ALL_PERMISSION_CODE = 1001
     const val TELEPHONY_PERMISSION_CODE = 1002
@@ -107,8 +108,7 @@ object ManifestPermission {
         if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG,"allGranted()")
             isGranted()
-        }
-        else {
+        } else {
             Log.d(TAG,"denied()")
             isDenied()
         }
@@ -116,11 +116,10 @@ object ManifestPermission {
 
     fun checkSelfPermission(context : Context, permissions : Array<String>, isGranted : () -> Unit = {}, isDenied : () -> Unit = {}) {
         Log.d(TAG,"checkSelfPermission($context,${permissions.contentToString()},isGranted(),isDenied())")
-        if (permissions.filter { permission -> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED}.isEmpty()) {
+        if (permissions.filter { permission -> ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_DENIED }.isEmpty()) {
             Log.d(TAG,"allGranted()")
             isGranted()
-        }
-        else {
+        } else {
             Log.d(TAG,"denied()")
             isDenied()
         }
@@ -138,7 +137,7 @@ object ManifestPermission {
 
     fun checkNeverAskAgain(activity : Activity, permission : String, isNeverAskAgain : () -> Unit = {}, isNotNeverAskAgain : () -> Unit = {}) {
         Log.d(TAG,"hasPermissions($activity,$permission,isNeverAskAgain(),isNotNeverAskAgain())")
-        if (!ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_DENIED) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission).not() && ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_DENIED) {
             isNeverAskAgain()
         } else {
             isNotNeverAskAgain()
@@ -150,8 +149,7 @@ object ManifestPermission {
         if(permissions.filter { permission -> ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED }.none()) {
             Log.d(TAG,"isNeverAskAgain()")
             isNeverAskAgain()
-        }
-        else {
+        } else {
             Log.d(TAG,"isNotNeverAskAgain()")
             isNotNeverAskAgain()
         }
@@ -161,20 +159,18 @@ object ManifestPermission {
         if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             Log.d(TAG, "permission Denied " + permission)
             isDenied()
+        } else if(ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "permission Allowed " + permission)
+            isGranted()
         } else {
-            if(ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "permission Allowed " + permission)
-                isGranted()
-            } else{
-                Log.d(TAG, "permission set to never ask again " + permission);
-                isNeverAskAgain()
-            }
+            Log.d(TAG, "permission set to never ask again " + permission);
+            isNeverAskAgain()
         }
     }
 
     fun checkPermissionsResult(activity : Activity, permissions : Array<String>, grantResults : IntArray,isGranted : () -> Unit, isNeverAskAgain : () -> Unit = {}, isDenied : () -> Unit) {
         when {
-            grantResults.all { results -> results ==  PackageManager.PERMISSION_GRANTED} -> {
+            grantResults.all { results -> results ==  PackageManager.PERMISSION_GRANTED } -> {
                 Log.d(TAG,"isGranted()")
                 isGranted()
             }
@@ -182,7 +178,7 @@ object ManifestPermission {
                 Log.d(TAG,"isNeverAskAgain()")
                 isNeverAskAgain()
             }
-            grantResults.filter { results -> results ==  PackageManager.PERMISSION_DENIED}.isNotEmpty() -> {
+            grantResults.filter { results -> results ==  PackageManager.PERMISSION_DENIED }.isNotEmpty() -> {
                 Log.d(TAG,"isDenied()")
                 isDenied()
             }
@@ -197,7 +193,7 @@ object ManifestPermission {
             permissions.filter { permission -> selectedRequestCode == requestCode && ActivityCompat.shouldShowRequestPermissionRationale(activity, permission) && ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_DENIED }.none() -> { Log.d(TAG,"isNeverAskAgain()")
                 isNeverAskAgain()
             }
-            grantResults.filter { results -> selectedRequestCode == requestCode && results ==  PackageManager.PERMISSION_DENIED}.isNotEmpty() -> { Log.d(TAG,"isDenied()")
+            grantResults.filter { results -> selectedRequestCode == requestCode && results ==  PackageManager.PERMISSION_DENIED }.isNotEmpty() -> { Log.d(TAG,"isDenied()")
                 isDenied()
             }
         }

@@ -49,98 +49,98 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view : View) {
         when(view) {
             allCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.allPermissions,
                     isGranted = { setTextData("All Permissions Granted!") },
                     isDenied = { setTextData("All Permissions Denied!") }
                 )
             }
             telephonyCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.telephonyPermissions,
                     isGranted = { setTextData("Telephony Permissions Granted!") },
                     isDenied = { setTextData("Telephony Permissions Denied!") }
                 )
             }
             microphoneCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.microphonePermission,
                     isGranted = { setTextData("Microphone Permissions Granted!") },
                     isDenied = { setTextData("Microphone Permissions Denied!") }
                 )
             }
             cameraCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.cameraPermission,
                     isGranted = { setTextData("Camera Permissions Granted!") },
                     isDenied = { setTextData("Camera Permissions Denied!") }
                 )
             }
             videoCallCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.videoCallPermission,
                     isGranted = { setTextData("Video Call Permissions Granted!") },
                     isDenied = { setTextData("Video Call Permissions Denied!") }
                 )
             }
             galleryCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.galleryPermissions,
                     isGranted = { setTextData("Gallery Permissions Granted!") },
                     isDenied = { setTextData("Gallery Permissions Denied!") }
                 )
             }
             contactCheckPermissions -> {
-                ManifestPermission.checkSelfPermission(this,
+                ManifestPermission.checkSelfPermission(this@MainActivity,
                     ManifestPermission.contactPermission,
                     isGranted = { setTextData("Contact Permissions Granted!") },
                     isDenied = { setTextData("Contact Permissions Denied!") }
                 )
             }
             allRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.allPermissions,
                     ManifestPermission.ALL_PERMISSION_CODE
                 )
             }
             telephonyRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.telephonyPermissions,
                     ManifestPermission.TELEPHONY_PERMISSION_CODE
                 )
             }
             microphoneRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.microphonePermission,
                     ManifestPermission.MICROPHONE_PERMISSION_CODE
                 )
             }
             cameraRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.cameraPermission,
                     ManifestPermission.CAMERA_PERMISSION_CODE
                 )
             }
             videoCallRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.videoCallPermission,
                     ManifestPermission.VIDEO_CALL_PERMISSION_CODE
                 )
             }
             galleryRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.galleryPermissions,
                     ManifestPermission.GALLERY_PERMISSION_CODE
                 )
             }
             contactRequestPermissions -> {
-                ManifestPermission.requestPermissions(this,
+                ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.contactPermission,
                     ManifestPermission.CONTACT_PERMISSION_CODE
                 )
             }
             showRationalDialog -> {
-                ManifestPermission.showRationalDialog(this,"Go to App Permission Settings?")
+                ManifestPermission.showRationalDialog(this@MainActivity,"Go to App Permission Settings?")
             }
         }
     }
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("PermissionsResult","grantResults " + grantResults.contentToString())
 
         permissions.map { permission ->
-            ManifestPermission.checkNeverAskAgain(this,permission,
+            ManifestPermission.checkNeverAskAgain(this@MainActivity,permission,
                 isNeverAskAgain = {
                     Log.d("PermissionsResult", "checkNeverAskAgain isNeverAskAgain single $permission")
                 },
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             )
 
-            ManifestPermission.checkPermissionsResult(this,permission,
+            ManifestPermission.checkPermissionsResult(this@MainActivity,permission,
                 isNeverAskAgain = {
                     Log.d("PermissionsResult", "checkPermissionsResult isNeverAskAgain single $permission")
                 }, isDenied = {
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             )
         }
 
-        ManifestPermission.checkNeverAskAgain(this,permissions,
+        ManifestPermission.checkNeverAskAgain(this@MainActivity, permissions,
             isNeverAskAgain = {
                 Log.d("PermissionsResult", "checkNeverAskAgain isNeverAskAgain")
             },
@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         )
 
-        ManifestPermission.checkPermissionsResult(this, permissions, grantResults,
+        ManifestPermission.checkPermissionsResult(this@MainActivity, permissions, grantResults,
             isNeverAskAgain =  {
                 Log.d("PermissionsResult", "checkPermissionsResult isNeverAskAgain")
                 when(requestCode) {
@@ -235,7 +235,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG,"onActivityResult($requestCode,$resultCode,$data)")
         if (requestCode == ManifestPermission.SETTINGS_PERMISSION_CODE)
-            Toast.makeText(this,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
