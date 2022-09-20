@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.connectionapp"
@@ -36,34 +36,22 @@ android {
 }
 
 dependencies {
-    //region Android UI Layout Library and backward-compatible Library(Legacy)
-    implementation "androidx.activity:activity:1.6.0-alpha04"
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    //region Android X Library
+    implementation "androidx.activity:activity-ktx:1.6.0-rc02"
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.navigation:navigation-fragment:2.4.2'
-    implementation 'androidx.navigation:navigation-ui:2.4.2'
-    //endregion
-    //region Life Cycle Components
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.1'
-    implementation "androidx.lifecycle:lifecycle-livedata:2.4.1"
-    implementation 'androidx.lifecycle:lifecycle-runtime:2.4.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.fragment:fragment-ktx:1.5.2'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
     //endregion
     //region Android Unit Test and U.I. Test Library
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    //endregion
-    //region Kotlin Library
-    implementation 'androidx.core:core:1.8.0'
-    //endregion
-    //region Room -> use annotationProcessor for java, kapt for kotlin
-    implementation "androidx.room:room-runtime:2.4.2"
-    annotationProcessor "androidx.room:room-compiler:2.4.2"
-    implementation "androidx.room:room-paging:2.5.0-alpha02"
-    testImplementation "androidx.room:room-testing:2.4.2" //android.arch.persistence.room:testing
-    //endregion
-    //region Work Manager
-    implementation "androidx.work:work-runtime:2.7.1" // (Java only)
     //endregion
 }

@@ -1,6 +1,8 @@
 package com.example.connectionapp;
 
 import android.content.ContentValues;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
@@ -37,6 +39,16 @@ public class MainViewModel extends ViewModel {
         }
     };
     //endregion
+    public IntentFilter[] getIntentFilter() {
+        //region creating intent receiver for NFC events:
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
+        filter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        filter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
+        //endregion
+        return new IntentFilter[]{filter};
+    }
+
     public String dumpTagData(Parcelable p) { Log.d(TAG,"dumpTagData(" + p + ")");
         StringBuilder sb = new StringBuilder();
         Tag tag = (Tag) p;
@@ -167,5 +179,9 @@ public class MainViewModel extends ViewModel {
             factor *= 256l;
         }
         return result;
+    }
+
+    public boolean isTagDiscovered(String action) {
+        return action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
     }
 }

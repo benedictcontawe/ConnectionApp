@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -30,22 +29,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mTextView = (TextView) findViewById(R.id.textView_explanation);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(getBaseContext());
     }
 
     @Override
     protected void onResume() { Log.d(TAG,"onResume()");
         super.onResume();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-        // creating intent receiver for NFC events:
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
-        filter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        filter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
-        // enabling foreground dispatch for getting intent from NFC event:
-        if (nfcAdapter != null)
-            nfcAdapter.enableForegroundDispatch(this, pendingIntent, new IntentFilter[]{filter}, viewModel.techList);
-        Log.d(ContentValues.TAG,"getIntent().getAction() " + getIntent().getAction() + " getIntent().getExtras()" + getIntent().getExtras());
+        if (nfcAdapter != null) //enabling foreground dispatch for getting intent from NFC event:
+            nfcAdapter.enableForegroundDispatch(this, pendingIntent, viewModel.getIntentFilter(), viewModel.techList);
         if (getIntent() != null)
             onNewIntent(getIntent());
     }
@@ -61,8 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) { Log.d(TAG,"onNewIntent()");
         super.onNewIntent(intent);
         Log.d(ContentValues.TAG,"intent.getAction() " + intent.getAction() + " intent.getExtras()" + intent.getExtras());
-        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
-            Log.d(ContentValues.TAG, "onNewIntent " + NfcAdapter.ACTION_TAG_DISCOVERED);
+        if (viewModel.isTagDiscovered(intent.getAction())) { Log.d(ContentValues.TAG, "onNewIntent " + NfcAdapter.ACTION_TAG_DISCOVERED);
             mTextView.setText(viewModel.getByteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)));
             Parcelable tagN = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             if (tagN != null) { Log.d(ContentValues.TAG, "Parcelable OK");
