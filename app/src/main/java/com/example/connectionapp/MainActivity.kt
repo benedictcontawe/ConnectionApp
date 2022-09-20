@@ -34,7 +34,7 @@ public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeLis
         Coroutines.main(this@MainActivity, { scope ->
             scope.launch( block = { binder?.getViewModel()?.observeNFCStatus()?.collectLatest ( action = { status ->
                 if (status == NFCStatus.NoOperation) NFCManager.disableReaderMode(this@MainActivity, this@MainActivity)
-                else if (status == NFCStatus.Tap) NFCManager.enableReaderMode(this@MainActivity, this@MainActivity, this@MainActivity, NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK, Bundle())
+                else if (status == NFCStatus.Tap) NFCManager.enableReaderMode(this@MainActivity, this@MainActivity, this@MainActivity, viewModel.getNFCFlags(), viewModel.getExtras())
             }) })
             scope.launch( block = { binder?.getViewModel()?.observeToast()?.collectLatest ( action = { message ->
                 Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()

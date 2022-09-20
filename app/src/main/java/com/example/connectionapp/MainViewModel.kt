@@ -6,6 +6,7 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.nfc.tech.MifareClassic
 import android.nfc.tech.MifareUltralight
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.*
@@ -49,6 +50,12 @@ public class MainViewModel : AndroidViewModel {
         NfcAdapter.FLAG_READER_NFC_F or
         NfcAdapter.FLAG_READER_NFC_V or
         NfcAdapter.FLAG_READER_NFC_BARCODE //or NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
+    }
+
+    public fun getExtras() : Bundle {
+        val options : Bundle = Bundle();
+        options.putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 30000);
+        return options
     }
     //region NFC Methods
     public fun onCheckNFC(isChecked : Boolean) { Coroutines.io(this@MainViewModel, { Log.d(TAG, "onCheckNFC(${isChecked})")
