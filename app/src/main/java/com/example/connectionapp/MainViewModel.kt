@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.experimental.and
 
-public open class MainViewModel : AndroidViewModel {
+public class MainViewModel : AndroidViewModel {
 
     companion object {
         private val TAG = MainViewModel::class.java.getSimpleName()
