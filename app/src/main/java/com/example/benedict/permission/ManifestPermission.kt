@@ -24,8 +24,9 @@ public object ManifestPermission {
     const val MICROPHONE_PERMISSION_CODE = 1003
     const val CAMERA_PERMISSION_CODE = 1004
     const val VIDEO_CALL_PERMISSION_CODE = 1005
-    const val GALLERY_PERMISSION_CODE = 1006
-    const val CONTACT_PERMISSION_CODE = 1007
+    const val VIDEO_RECORD_PERMISSION_CODE = 1006
+    const val GALLERY_PERMISSION_CODE = 1007
+    const val CONTACT_PERMISSION_CODE = 1008
 
     val allPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -76,6 +77,12 @@ public object ManifestPermission {
     val videoCallPermission = arrayOf(
         Manifest.permission.RECORD_AUDIO,
         Manifest.permission.CAMERA
+    )
+
+    val videoRecordPermission = arrayOf(
+        Manifest.permission.RECORD_AUDIO,
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
     val galleryPermissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
