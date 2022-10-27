@@ -53,4 +53,12 @@ public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeLis
     override fun onTagDiscovered(tag : Tag?) {
         binder?.getViewModel()?.readTag(tag)
     }
+
+    private fun launchMainFragment() {
+        if (getSupportFragmentManager().findFragmentByTag(MainFragment::class.java.getSimpleName()) == null)
+            getSupportFragmentManager().beginTransaction()
+                .add(R.id.frame_layout, MainFragment.newInstance(), MainFragment::class.java.getSimpleName())
+                .addToBackStack(MainFragment::class.java.getSimpleName())
+                .commit()
+    }
 }
