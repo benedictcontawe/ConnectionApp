@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ConnectionApp.iml" filepath="$PROJECT_DIR$/ConnectionApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConnectionApp.iml" filepath="$PROJECT_DIR$/.idea/modules/ConnectionApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/ConnectionApp.app.main.iml" />
