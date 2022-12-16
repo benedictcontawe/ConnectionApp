@@ -1,6 +1,7 @@
 package com.example.connectionapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,17 +10,17 @@ import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.example.connectionapp.databinding.MainBinder;
+import io.reactivex.rxjava3.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private MainBinder binding;
     private MainViewModel viewModel;
 
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         binding.getViewModel().setData("Test");
     }
 
@@ -60,12 +60,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setLiveDataObservers() {
-        viewModel.getData().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String string) {
-                binding.textResult.setText(string);
-            }
-        });
+        viewModel.addDisposable(
+            viewModel.observeData().subscribe(new Consumer<String>() {
+                @Override
+                public void accept(String string) throws Throwable {
+                    Log.d(TAG, "accept(" + string + ")");
+                    binding.textResult.setText(string);
+                }
+            })
+        );
 
         viewModel.getProgressData().observe(this, new Observer<Integer>() {
             @Override
@@ -75,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setEventListeners(){
+    private void setEventListeners() {
         binding.buttonSendData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +257,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        viewModel.getData().observe(this, null);
         binding.buttonSendData.setOnClickListener(null);
         binding.switchSendData.setOnCheckedChangeListener(null);
         binding.toggleButtonSendData.setOnCheckedChangeListener(null);
