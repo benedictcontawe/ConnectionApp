@@ -27,6 +27,7 @@ public class MainViewModel extends ViewModel {
     public MainViewModel() {
         Log.d(TAG, "MainViewModel constructor");
         //https://medium.com/@nazarivanchuk/types-of-subjects-in-rxjava-96f3a0c068e4
+        publishSubject.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         /*
         observable = Observable.empty();
         observable.subscribeOn(Schedulers.io())
@@ -54,7 +55,6 @@ public class MainViewModel extends ViewModel {
     }
 
     public PublishSubject<String> observeData() {
-        publishSubject.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         return publishSubject;
     }
 
