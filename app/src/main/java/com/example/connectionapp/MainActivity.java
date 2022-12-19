@@ -12,7 +12,6 @@ import android.widget.RatingBar;
 import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import com.example.connectionapp.databinding.MainBinder;
@@ -64,18 +63,21 @@ public class MainActivity extends AppCompatActivity {
             viewModel.observeData().subscribe(new Consumer<String>() {
                 @Override
                 public void accept(String string) throws Throwable {
-                    Log.d(TAG, "accept(" + string + ")");
+                    Log.d(TAG, "accept(Data " + string + ")");
                     binding.textResult.setText(string);
                 }
             })
         );
 
-        viewModel.getProgressData().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer integer) {
-                binding.progressBarResult.setProgress(integer);
-            }
-        });
+        viewModel.addDisposable(
+            viewModel.observeProgressData().subscribe(new Consumer<Integer>() {
+                @Override
+                public void accept(Integer integer) throws Throwable {
+                    Log.d(TAG, "accept(Progress Data " + integer + ")");
+                    binding.progressBarResult.setProgress(integer);
+                }
+            })
+        );
     }
 
     private void setEventListeners() {

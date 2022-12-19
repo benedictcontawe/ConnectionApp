@@ -12,7 +12,12 @@ import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.subjects.AsyncSubject;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.CompletableSubject;
 import io.reactivex.rxjava3.subjects.PublishSubject;
+import io.reactivex.rxjava3.subjects.ReplaySubject;
+import io.reactivex.rxjava3.subjects.UnicastSubject;
 
 public class MainViewModel extends ViewModel {
 
@@ -23,11 +28,15 @@ public class MainViewModel extends ViewModel {
     private final CompositeDisposable disposable = new CompositeDisposable();
     //private Observable observable;
     private final PublishSubject<String> publishSubject = PublishSubject.create();
+    private final BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.createDefault(0);
+    private final ReplaySubject<String> replaySubject = ReplaySubject.create(0);
+    private final AsyncSubject<String> asyncSubject = AsyncSubject.create();
+    private final UnicastSubject<String> unicastSubject = UnicastSubject.create();
 
     public MainViewModel() {
         Log.d(TAG, "MainViewModel constructor");
         //https://medium.com/@nazarivanchuk/types-of-subjects-in-rxjava-96f3a0c068e4
-        publishSubject.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        //publishSubject.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
         /*
         observable = Observable.empty();
         observable.subscribeOn(Schedulers.io())
@@ -62,12 +71,12 @@ public class MainViewModel extends ViewModel {
         this.publishSubject.onNext(data);
     }
 
-    public LiveData<Integer> getProgressData() {
-        return progressData;
+    public BehaviorSubject<Integer> observeProgressData() {
+        return behaviorSubject;
     }
 
     public void setProgressData(Integer progressData) {
-        this.progressData.setValue(progressData);
+        behaviorSubject.onNext(progressData);
     }
     /*
     private Observable<String> getObservable() {
