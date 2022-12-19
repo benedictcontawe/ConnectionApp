@@ -29,7 +29,7 @@ public class MainViewModel extends ViewModel {
     //private Observable observable;
     private final PublishSubject<String> publishSubject = PublishSubject.create();
     private final BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.createDefault(0);
-    private final ReplaySubject<String> replaySubject = ReplaySubject.create(0);
+    private final ReplaySubject<String> replaySubject = ReplaySubject.create(1);
     private final AsyncSubject<String> asyncSubject = AsyncSubject.create();
     private final UnicastSubject<String> unicastSubject = UnicastSubject.create();
 
