@@ -2,12 +2,11 @@ package com.example.connectionapp;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -22,7 +21,6 @@ import io.reactivex.rxjava3.subjects.UnicastSubject;
 public class MainViewModel extends ViewModel {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
-    MutableLiveData<Integer> progressData = new MutableLiveData<Integer>();
 
     //private UnicastSubject<String> subject = UnicastSubject.create();
     private final CompositeDisposable disposable = new CompositeDisposable();
@@ -62,16 +60,16 @@ public class MainViewModel extends ViewModel {
         this.disposable.add(disposable);
     }
 
-    public PublishSubject<String> observeData() {
-        return publishSubject;
+    public Observable<String> observeData() {
+        return publishSubject.hide();
     }
 
     public void setData(String data) {
         this.publishSubject.onNext(data);
     }
 
-    public BehaviorSubject<Integer> observeProgressData() {
-        return behaviorSubject;
+    public Observable<Integer> observeProgressData() {
+        return behaviorSubject.hide();
     }
 
     public void setProgressData(Integer progressData) {
