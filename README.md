@@ -7,3 +7,5 @@
 - [RxJava — Schedulers — What, when and how to use it?](https://medium.com/android-news/rxjava-schedulers-what-when-and-how-to-use-it-6cfc27293add)
 
 - [Reactive java method hide()](https://stackoverflow.com/questions/46868012/reactive-java-method-hide)
+
+- [.hide() your Subjects - RxJava tip by Kaushik Gopal](https://kau.sh/blog/rx-tip-hide-your-subjects/rxjava%20hide%20vs%20cast)
