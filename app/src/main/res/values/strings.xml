@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">ManifestPermissionChecker</string>
-    <!--<string name="app_name">Locker</string>-->
+    <string name="check_all_permissions">Check All Permissions</string>
+    <string name="check_telephony_permissions">Check Telephony Permissions</string>
+    <string name="check_microphone_permissions">Check Microphone Permissions</string>
+    <string name="check_camera_permissions">Check Camera Permissions</string>
+    <string name="check_video_call_permissions">Check Video Call Permissions</string>
+    <string name="check_gallery_permissions">Check Gallery Permissions</string>
+    <string name="check_contact_permissions">Check Contact Permissions</string>
+    <string name="request_all_permissions">Request All Permissions</string>
+    <string name="request_telephony_permissions">Request Telephony Permissions</string>
+    <string name="request_microphone_permissions">Request Microphone Permissions</string>
+    <string name="request_camera_permissions">Request Camera Permissions</string>
+    <string name="request_video_call_permissions">Request Video Call Permissions</string>
+    <string name="request_gallery_permissions">Request Gallery Permissions</string>
+    <string name="request_contact_permissions">Request Contact Permissions</string>
+    <string name="go_to_app_permission_settings">Go to App Permission Settings</string>
 </resources>
