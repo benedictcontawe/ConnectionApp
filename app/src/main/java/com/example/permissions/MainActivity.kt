@@ -1,10 +1,12 @@
 package com.example.permissions
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.permissions.databinding.MainBinder
@@ -21,9 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binder = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
         binder?.setLifecycleOwner(this@MainActivity)
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-
-        }
+        onActivityResult()
         //region Check Permission On Click Listener
         binder?.allCheckPermissions?.setOnClickListener(this@MainActivity)
         binder?.telephonyCheckPermissions?.setOnClickListener(this@MainActivity)
@@ -238,6 +238,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         } )
     }
 
+    private fun onActivityResult() { Log.d(TAG,"onActivityResult()")
+        registerForActivityResult( ActivityResultContracts.StartActivityForResult() ) { activityResult ->
+            Log.d(TAG,"activityResult(${activityResult.getResultCode()},${activityResult.getData()})")
+            if (activityResult.getResultCode() == Activity.RESULT_OK) {
+                Log.d(TAG,"activityResult.getResultCode() == Activity.RESULT_OK")
+            }
+            if (activityResult.getResultCode() == ManifestPermission.SETTINGS_PERMISSION_CODE)
+                Toast.makeText(this@MainActivity,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG,"onActivityResult($requestCode,$resultCode,$data)")
