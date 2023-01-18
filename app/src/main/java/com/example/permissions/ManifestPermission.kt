@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -250,6 +251,7 @@ public object ManifestPermission {
         }
     }
 
+    @Deprecated("Deprecated")
     public fun showRationalDialog(activity : Activity, message : String) {
         Log.d(TAG,"showRationalDialog($activity,$message")
         val builder = activity.let { AlertDialog.Builder(it) }
@@ -265,6 +267,22 @@ public object ManifestPermission {
         builder.show()
     }
 
+    public fun showRationalDialog(activity : Activity, message : String, activityResultLauncher : ActivityResultLauncher<Intent>) {
+        Log.d(TAG,"showRationalDialog($activity,$message")
+        val builder = activity.let { AlertDialog.Builder(it) }
+        builder.setTitle("Manifest Permissions")
+        builder.setMessage(message)
+        builder.setPositiveButton("SETTINGS") { dialog, which ->
+            dialog.dismiss()
+            showAppPermissionSettings(activity, activityResultLauncher)
+        }
+        builder.setNegativeButton("NOT NOW") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+    @Deprecated("Deprecated")
     private fun showAppPermissionSettings(activity : Activity) {
         Log.d("PermissionsResult", "showAppPermissionSettings()")
         val intent = Intent(
@@ -275,5 +293,17 @@ public object ManifestPermission {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
         activity.startActivityForResult(intent, SETTINGS_PERMISSION_CODE)
+    }
+
+    private fun showAppPermissionSettings(activity : Activity, activityResultLauncher : ActivityResultLauncher<Intent>) {
+        Log.d("PermissionsResult", "showAppPermissionSettings()")
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+            Uri.fromParts("package", activity.packageName, null)
+        )
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+        activityResultLauncher.launch(intent)
     }
 }

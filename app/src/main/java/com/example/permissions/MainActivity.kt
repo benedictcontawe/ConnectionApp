@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binder = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
         binder?.setLifecycleOwner(this@MainActivity)
         super.onCreate(savedInstanceState)
-        onActivityResult()
         //region Check Permission On Click Listener
         binder?.allCheckPermissions?.setOnClickListener(this@MainActivity)
         binder?.telephonyCheckPermissions?.setOnClickListener(this@MainActivity)
@@ -147,7 +147,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
             binder?.showRationalDialog -> {
-                ManifestPermission.showRationalDialog(this@MainActivity,"Go to App Permission Settings?")
+                ManifestPermission.showRationalDialog(this@MainActivity,"Go to App Permission Settings?", activityResultLauncher)
             }
         }
     }
@@ -238,14 +238,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         } )
     }
 
-    private fun onActivityResult() { Log.d(TAG,"onActivityResult()")
-        registerForActivityResult( ActivityResultContracts.StartActivityForResult() ) { activityResult ->
-            Log.d(TAG,"activityResult(${activityResult.getResultCode()},${activityResult.getData()})")
-            if (activityResult.getResultCode() == Activity.RESULT_OK) {
-                Log.d(TAG,"activityResult.getResultCode() == Activity.RESULT_OK")
-            }
-            if (activityResult.getResultCode() == ManifestPermission.SETTINGS_PERMISSION_CODE)
-                Toast.makeText(this@MainActivity,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show()
+    private val activityResultLauncher : ActivityResultLauncher<Intent> = registerForActivityResult( ActivityResultContracts.StartActivityForResult() ) { activityResult ->
+        Log.d(TAG,"activityResultLauncher(${activityResult.getResultCode()},${activityResult.getData()})")
+        if (activityResult.getResultCode() == Activity.RESULT_OK) {
+            Log.d(TAG,"activityResult.getResultCode() == Activity.RESULT_OK")
+        } else if (activityResult.getResultCode() == Activity.RESULT_CANCELED) {
+            Log.d(TAG,"activityResult.getResultCode() == Activity.RESULT_CANCELED")
         }
     }
 
