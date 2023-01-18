@@ -31,23 +31,56 @@ public class ManifestPermission {
     static final public int CONTACT_PERMISSION_CODE = 1007;
 
     static final public String[] getAllPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_NUMBERS,
+                Manifest.permission.RECORD_AUDIO
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return new String[]{
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS,
-                    Manifest.permission.READ_CONTACTS,
-                    Manifest.permission.WRITE_CONTACTS,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    Manifest.permission.READ_PHONE_NUMBERS
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_PHONE_NUMBERS,
+                Manifest.permission.RECORD_AUDIO
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return new String[] {
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO
             };
         } else {
             return new String[] {
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS,
-                    Manifest.permission.READ_CONTACTS,
-                    Manifest.permission.WRITE_CONTACTS,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO
             };
         }
     }
@@ -55,46 +88,61 @@ public class ManifestPermission {
     static final public String[] getTelephonyPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return new String[]{
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS,
-                    Manifest.permission.READ_PHONE_NUMBERS
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS,
+                Manifest.permission.READ_PHONE_NUMBERS
             };
         } else {
             return new String[] {
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_SMS
             };
         }
     };
 
     static final public String[] getMicrophonePermission() {
         return new String[] {
-                Manifest.permission.RECORD_AUDIO
+            Manifest.permission.RECORD_AUDIO
         };
     }
 
     static final public String[] getCameraPermission() {
         return new String[] {
-                Manifest.permission.CAMERA
+            Manifest.permission.CAMERA
         };
     }
 
     static final public String[] getVideoCallPermission() {
         return new String[] {
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.CAMERA
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA
+        };
+    }
+
+    static final public String[] getVideoRecordPermission() {
+        return new String[] {
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
         };
     }
 
     static final public String[] getGalleryPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return new String[]{
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.READ_MEDIA_AUDIO,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
         } else {
             return new String[] {
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
         }
     }
@@ -112,6 +160,13 @@ public class ManifestPermission {
                     Manifest.permission.WRITE_CONTACTS
             };
         }
+    }
+
+    static final public String[] getLocationPermission() {
+        return new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        };
     }
 
     static final public void checkSelfPermission(Context context, String permission) { //TODO(Not Completed)
@@ -169,12 +224,10 @@ public class ManifestPermission {
     static final public void checkPermissionsResult(Activity activity, String permission, int requestCode) { //TODO(Not Completed)
         if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             Log.d(TAG, "permission Denied " + permission);
+        } else if(ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "permission Allowed " + permission);
         } else {
-            if(ActivityCompat.checkSelfPermission(activity,permission) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "permission Allowed " + permission);
-            } else{
-                Log.d(TAG, "permission set to never ask again " + permission);
-            }
+            Log.d(TAG, "permission set to never ask again " + permission);
         }
     }
 
@@ -185,7 +238,7 @@ public class ManifestPermission {
 
 
     static final public void showRationalDialog(final Activity activity, String message) {
-        Log.d(TAG,"showRationalDialog($activity,$message");
+        Log.d(TAG,"showRationalDialog("+ activity +","+ message);
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Manifest Permissions");
         builder.setMessage(message);
@@ -208,14 +261,14 @@ public class ManifestPermission {
     static final private void showAppPermissionSettings(Activity activity) {
         Log.d("PermissionsResult", "showAppPermissionSettings()");
         activity.startActivityForResult(
-                new Intent(
-                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.fromParts("package", activity.getPackageName(), null)
-                )
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                        .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS),
-                SETTINGS_PERMISSION_CODE
+            new Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", activity.getPackageName(), null)
+            )
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS),
+            SETTINGS_PERMISSION_CODE
         );
     }
 }

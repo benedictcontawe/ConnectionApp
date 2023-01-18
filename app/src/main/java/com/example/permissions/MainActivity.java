@@ -1,9 +1,15 @@
 package com.example.permissions;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,6 +24,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final private String TAG = MainActivity.class.getSimpleName();
     private static final int PERMISSION_STATE = 0;
     private Boolean callPermissionSettings,requestGranted, neverAskAgain;
     private TextView txtData;
@@ -168,6 +175,40 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         startActivity(intent);
+    }
+
+    private void  onActivityResult() { Log.d(TAG,"onActivityResult()");
+        ActivityResultLauncher<Intent> mStartForResult = registerForActivityResult (
+                new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult activityResult) {
+                    if (activityResult.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = activityResult.getData();   // Handle the Intent
+                    }
+                    if (activityResult.getResultCode() == ManifestPermission.SETTINGS_PERMISSION_CODE)
+                        Toast.makeText(getBaseContext(), "PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show();
+                }
+            }
+        );
+        //mStartForResult.launch();
+
+        ActivityResultLauncher<String> mGetContent = registerForActivityResult (
+            new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri uri) {
+                    // Handle the returned Uri
+                }
+            }
+        );
+        //mGetContent.launch();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG,"onActivityResult(" + requestCode + ", " + resultCode + ", " + data );
+        if (requestCode == ManifestPermission.SETTINGS_PERMISSION_CODE)
+            Toast.makeText(this,"PERMISSION_SETTINGS_CODE",Toast.LENGTH_SHORT).show();
     }
 
     @Override
