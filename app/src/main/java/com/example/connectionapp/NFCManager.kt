@@ -3,13 +3,16 @@ package com.example.connectionapp
 import android.app.Activity
 import android.content.Context
 import android.nfc.NfcAdapter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 
 public object NFCManager {
 
     private val TAG = NFCManager::class.java.getSimpleName()
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     public fun enableReaderMode(context : Context, activity : Activity, callback : NfcAdapter.ReaderCallback, flags : Int, extras : Bundle) {
         try {
             NfcAdapter.getDefaultAdapter(context).enableReaderMode(activity, callback, flags, extras)
@@ -18,6 +21,7 @@ public object NFCManager {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
     public fun disableReaderMode(context : Context, activity : Activity) {
         try {
             NfcAdapter.getDefaultAdapter(context).disableReaderMode(activity)
