@@ -29,6 +29,7 @@ public object ManifestPermission {
     const val GALLERY_PERMISSION_CODE = 1007
     const val CONTACT_PERMISSION_CODE = 1008
     const val LOCATION_PERMISSION_CODE = 1009
+    const val NOTIFICATION_PERMISSION_CODE = 1010
 
     val allPermissions =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -154,6 +155,17 @@ public object ManifestPermission {
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
         )
+
+    val notificationPermission =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        arrayOf(
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+    } else {
+        arrayOf(
+
+        )
+    }
 
     fun checkSelfPermission(context : Context, permission : String, isGranted : () -> Unit = {}, isDenied : () -> Unit = {}) {
         Log.d(TAG,"checkSelfPermission($context,$permission,isGranted(),isDenied())")
