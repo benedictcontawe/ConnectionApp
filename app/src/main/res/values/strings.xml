@@ -1,4 +1,7 @@
 <resources>
-    <string name="app_name">BluetoothArduino</string>
-    <!--<string name="app_name">Locker</string>-->
+    <string name="app_name">LiveWebViewApp</string>
+    <string name="android_view">Android View</string>
+    <string name="show_alert">Show Alert</string>
+    <string name="send_to_web">Send to Web</string>
+    <string name="text_send_to_web">Text send to Web</string>
 </resources>

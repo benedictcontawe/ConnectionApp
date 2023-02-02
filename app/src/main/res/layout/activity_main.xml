@@ -1,64 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.benedict.bluetootharduino.MainActivity">
+    tools:context="com.example.benedict.webviewconnection.MainActivity">
+    <!--region Guide lines-->
+    <!--region Vertical Guide lines-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_vertical_leading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.02"/>
 
-    <LinearLayout
-        android:id="@+id/LLTwobtn"
-        android:layout_width="fill_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_vertical_trailing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.98"/>
+    <!--endregion-->
+    <!--region Horizontal Guidlines-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_horizontal_top"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2" >
+        app:layout_constraintGuide_percent="0.02" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_horizontal_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/constraint_guideline_horizontal_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.98" />
+    <!--endregion-->
+    <!--endregion-->
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_top"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_leading"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_trailing"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_center" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="@dimen/padding"
+        android:background="@color/colorDivider"
+        app:layout_constraintTop_toBottomOf="@id/web_view"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_leading"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_trailing"
+        app:layout_constraintBottom_toTopOf="@id/constraint_guideline_horizontal_center"/>
+
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:gravity="center"
         android:orientation="vertical"
-        >
+        app:layout_constraintTop_toTopOf="@id/constraint_guideline_horizontal_center"
+        app:layout_constraintStart_toStartOf="@id/constraint_guideline_vertical_leading"
+        app:layout_constraintEnd_toEndOf="@id/constraint_guideline_vertical_trailing"
+        app:layout_constraintBottom_toBottomOf="@id/constraint_guideline_horizontal_bottom">
 
-    <Button
-        android:id="@+id/btnBluetoothFindPairedMacAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search Paired Device" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            >
+            android:paddingBottom="@dimen/padding"
+            android:text="@string/android_view"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btnScan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Scan Device" />
+        <TextView
+            android:id="@+id/text_from_web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="@dimen/padding"
+            android:text="Web Text"
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
-        </LinearLayout>
+        <EditText
+            android:id="@+id/edit_text_to_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:textSize="20sp"
+            android:hint="@string/text_send_to_web"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/button_show_alert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:hint="@string/show_alert"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button_send_to_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding"
+            android:hint="@string/send_to_web"
+            android:textSize="20sp" />
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/ListMacAddressesDevices"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible"/>
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:visibility="invisible"
-        />
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
