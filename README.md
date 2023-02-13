@@ -26,6 +26,8 @@
 
 - [Solve - split is not a function Error in JavaScript](https://bobbyhadz.com/blog/javascript-typeerror-string-split-is-not-a-function)
 
+- [App install location](https://developer.android.com/guide/topics/data/install-location)
+
 ### RxJava
 
 - [Types of Subjects in RxJava](https://medium.com/@nazarivanchuk/types-of-subjects-in-rxjava-96f3a0c068e4)
