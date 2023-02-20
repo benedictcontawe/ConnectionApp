@@ -1,4 +1,4 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.connectionapp.databinding.MainBinder
+import com.example.nfcapp.databinding.FragmentBinder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,7 +21,7 @@ class MainFragment : Fragment, CompoundButton.OnCheckedChangeListener {
         public fun newInstance() : MainFragment = MainFragment()
     }
 
-    private var binder : MainBinder? = null
+    private var binder : FragmentBinder? = null
     private val viewModel : MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     constructor() {
@@ -38,9 +38,9 @@ class MainFragment : Fragment, CompoundButton.OnCheckedChangeListener {
     override fun onViewCreated(view : View, savedInstanceState : Bundle?) {
         Coroutines.main(this@MainFragment, { scope ->
             scope.launch( block = { binder?.getViewModel()?.observeToast()?.collectLatest ( action = { message ->
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
             }) })
-            scope.launch( block = { binder?.getViewModel()?.observeLiveData()?.collectLatest ( action = { tag ->
+            scope.launch( block = { binder?.getViewModel()?.observeTag()?.collectLatest ( action = { tag ->
                 binder?.textViewExplanation?.setText(tag)
             }) })
         })

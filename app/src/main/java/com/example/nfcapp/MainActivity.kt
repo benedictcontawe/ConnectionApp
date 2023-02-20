@@ -1,24 +1,26 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.CompoundButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import com.example.connectionapp.databinding.MainBinder
+import com.example.nfcapp.databinding.ActivityBinder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeListener,NfcAdapter.ReaderCallback {
+public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeListener, NfcAdapter.ReaderCallback {
 
     companion object {
         private val TAG = MainActivity::class.java.getSimpleName()
     }
 
-    private var binder : MainBinder? = null
+    private var binder : ActivityBinder? = null
     private val viewModel : MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
 
     constructor() {
@@ -32,14 +34,14 @@ public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeLis
         super.onCreate(savedInstanceState)
         binder?.toggleButton?.setOnCheckedChangeListener(this@MainActivity)
         Coroutines.main(this@MainActivity, { scope ->
-            scope.launch( block = { binder?.getViewModel()?.observeNFCStatus()?.collectLatest ( action = { status ->
+            scope.launch( block = { binder?.getViewModel()?.observeNFCStatus()?.collectLatest ( action = { status -> Log.d(TAG, "observeNFCStatus $status")
                 if (status == NFCStatus.NoOperation) NFCManager.disableReaderMode(this@MainActivity, this@MainActivity)
                 else if (status == NFCStatus.Tap) NFCManager.enableReaderMode(this@MainActivity, this@MainActivity, this@MainActivity, viewModel.getNFCFlags(), viewModel.getExtras())
             }) })
-            scope.launch( block = { binder?.getViewModel()?.observeToast()?.collectLatest ( action = { message ->
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+            scope.launch( block = { binder?.getViewModel()?.observeToast()?.collectLatest ( action = { message -> Log.d(TAG, "observeToast $message")
+                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
             }) })
-            scope.launch( block = { binder?.getViewModel()?.observeLiveData()?.collectLatest ( action = { tag ->
+            scope.launch( block = { binder?.getViewModel()?.observeTag()?.collectLatest ( action = { tag -> Log.d(TAG, "observeTag $tag")
                 binder?.textViewExplanation?.setText(tag)
             }) })
         })

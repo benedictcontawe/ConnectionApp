@@ -1,4 +1,4 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment

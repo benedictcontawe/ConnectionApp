@@ -1,4 +1,4 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 import android.app.Application
 import android.content.ContentValues
@@ -36,7 +36,7 @@ public class MainViewModel : AndroidViewModel {
         liveToast.emit(message)
     } ) }
 
-    private suspend fun postToast(message : String) {
+    private suspend fun postToast(message : String) { Log.d(TAG, "postToast(${message})")
         liveToast.emit(message)
     }
 
@@ -61,10 +61,9 @@ public class MainViewModel : AndroidViewModel {
     public fun onCheckNFC(isChecked : Boolean) { Coroutines.io(this@MainViewModel, { Log.d(TAG, "onCheckNFC(${isChecked})")
         if (isChecked) {
             postNFCStatus(NFCStatus.Tap)
-            liveTag.emit("Please Tap Now")
         } else {
             postNFCStatus(NFCStatus.NoOperation)
-            liveTag.emit(null)
+            postToast("NFC is Disabled, Please Toggle On!")
         }
     } ) }
 
@@ -117,11 +116,22 @@ public class MainViewModel : AndroidViewModel {
     } ) }
 
     private suspend fun postNFCStatus(status : NFCStatus) { Log.d(TAG, "postNFCStatus(${status})")
-        if (NFCManager.isSupportedAndEnabled(getApplication())) liveNFC.emit(status)
-        else if (NFCManager.isNotEnabled(getApplication())) { liveNFC.emit(NFCStatus.NotEnabled)
+        if (NFCManager.isSupportedAndEnabled(getApplication())) {
+            liveNFC.emit(status)
+        }
+        else if (NFCManager.isNotEnabled(getApplication())) {
+            liveNFC.emit(NFCStatus.NotEnabled)
             postToast("Please Enable your NFC!")
-        } else if (NFCManager.isNotSupported(getApplication())) { liveNFC.emit(NFCStatus.NotSupported)
+            liveTag.emit("Please Enable your NFC!")
+        } else if (NFCManager.isNotSupported(getApplication())) {
+            liveNFC.emit(NFCStatus.NotSupported)
             postToast("NFC Not Supported!")
+            liveTag.emit("NFC Not Supported!")
+        }
+        if (NFCManager.isSupportedAndEnabled(getApplication()) && status == NFCStatus.Tap) {
+            liveTag.emit("Please Tap Now!")
+        } else {
+            liveTag.emit(null)
         }
     }
 
@@ -173,7 +183,7 @@ public class MainViewModel : AndroidViewModel {
         return result
     }
 
-    public fun observeLiveData() : StateFlow<String?> {
+    public fun observeTag() : StateFlow<String?> {
         return liveTag.asStateFlow()
     }
     //endregion

@@ -1,4 +1,4 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 enum class NFCStatus {
     NoOperation,

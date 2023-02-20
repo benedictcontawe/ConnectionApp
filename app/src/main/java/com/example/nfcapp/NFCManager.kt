@@ -1,4 +1,4 @@
-package com.example.connectionapp
+package com.example.nfcapp
 
 import android.app.Activity
 import android.content.Context
