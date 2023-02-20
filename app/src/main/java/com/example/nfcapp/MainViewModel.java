@@ -1,5 +1,6 @@
-package com.example.connectionapp;
+package com.example.nfcapp;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
@@ -14,31 +15,59 @@ import android.nfc.tech.NfcF;
 import android.nfc.tech.NfcV;
 import android.os.Parcelable;
 import android.util.Log;
-import androidx.lifecycle.ViewModel;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-//import static android.content.ContentValues.TAG;
 
-public class MainViewModel extends ViewModel {
+public class MainViewModel extends AndroidViewModel {
 
     private final static String TAG = MainViewModel.class.getSimpleName();
     private final static String prefix = "android.nfc.tech.";
-    //region list of NFC technologies detected:
-    public final String[][] techList = new String[][] {
-        new String[] {
-            NfcA.class.getName(),
-            NfcB.class.getName(),
-            NfcF.class.getName(),
-            NfcV.class.getName(),
-            IsoDep.class.getName(),
-            MifareClassic.class.getName(),
-            MifareUltralight.class.getName(), Ndef.class.getName()
-        }
-    };
+
+    public MainViewModel(Application application) {
+        super(application);
+        Log.d(TAG, "constructor");
+        liveNFCStatus = new MutableLiveData<String>();
+    }
+    //region NFC Status Methods
+    private final MutableLiveData<String> liveNFCStatus;
+
+    public void checkNFCStatus(NfcAdapter nfcAdapter) { Log.d(TAG, "checkNFCStatus()");
+        if (NFCManager.isSupportedAndEnabled(nfcAdapter)) liveNFCStatus.setValue(
+                getApplication().getString(R.string.please_tap_at_nfc_sensor)
+        );
+        else if (NFCManager.isNotEnabled(nfcAdapter)) liveNFCStatus.setValue(
+                getApplication().getString(R.string.please_enable_your_nfc)
+        );
+        else if (NFCManager.isNotSupported(nfcAdapter)) liveNFCStatus.setValue(
+                getApplication().getString(R.string.nfc_not_supported)
+        );
+    }
+
+    public LiveData<String> observeNFCStatus() {
+        return liveNFCStatus;
+    }
     //endregion
+    //region NFC Process Methods, list of NFC technologies detected:
+    public final String[][] techList = new String[][] {
+            new String[] {
+                    NfcA.class.getName(),
+                    NfcB.class.getName(),
+                    NfcF.class.getName(),
+                    NfcV.class.getName(),
+                    IsoDep.class.getName(),
+                    MifareClassic.class.getName(),
+                    MifareUltralight.class.getName(), Ndef.class.getName()
+            }
+    };
+
     public IntentFilter[] getIntentFilter() {
         //region creating intent receiver for NFC events:
         IntentFilter filter = new IntentFilter();
@@ -184,4 +213,5 @@ public class MainViewModel extends ViewModel {
     public boolean isTagDiscovered(String action) {
         return action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
     }
+    //endregion
 }
