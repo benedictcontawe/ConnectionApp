@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         mTextViewStatus = (TextView) findViewById(R.id.text_view_status);
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         nfcAdapter = NfcAdapter.getDefaultAdapter(getBaseContext());
-        viewModel.observeNFCStatus().observe(this, new Observer<String>() {
+        viewModel.observeNFCState().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String nfcStatus) {
                 mTextViewStatus.setText(nfcStatus);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() { Log.d(TAG,"onResume()");
         super.onResume();
-        viewModel.checkNFCStatus(nfcAdapter);
+        viewModel.checkNFCStatus();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         if (nfcAdapter != null) //enabling foreground dispatch for getting intent from NFC event:
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, viewModel.getIntentFilter(), viewModel.techList);
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() { Log.d(TAG,"onPause()");
         super.onPause();
+        viewModel.setNFC(NFCStatus.NoOperation);
         if (nfcAdapter != null)
             nfcAdapter.disableForegroundDispatch(this);
     }
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(ContentValues.TAG,"intent.getAction() " + intent.getAction() + " intent.getExtras()" + intent.getExtras());
         if (viewModel.isTagDiscovered(intent.getAction())) { Log.d(ContentValues.TAG, "onNewIntent " + NfcAdapter.ACTION_TAG_DISCOVERED);
             mTextViewExplanation.setText(viewModel.getByteArrayToHexString(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)));
+            viewModel.setNFC(NFCStatus.Read);
             Parcelable tagN = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             if (tagN != null) { Log.d(ContentValues.TAG, "Parcelable OK");
                 NdefMessage[] msgs;
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 String data = viewModel.dumpTagData(tagN);
                 byte[] payload = data.getBytes();
                 mTextViewExplanation.setText(viewModel.getDateTimeNow(data));
+                viewModel.setNFC(NFCStatus.Read);
                 NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
                 NdefMessage msg = new NdefMessage(new NdefRecord[] { record });
                 msgs = new NdefMessage[] { msg };

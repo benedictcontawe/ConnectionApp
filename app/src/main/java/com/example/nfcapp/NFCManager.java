@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 public class NFCManager {
@@ -31,27 +32,35 @@ public class NFCManager {
         }
     }
 
-    public static Boolean isSupported(NfcAdapter nfcAdapter) {
+    public static Boolean isSupported(final Context context) {
+        @Nullable
+        final NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         if (nfcAdapter == null) return false;
         else return true;
     }
 
-    public static Boolean isNotSupported(NfcAdapter nfcAdapter) {
+    public static Boolean isNotSupported(final Context context) {
+        @Nullable
+        final NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         if (nfcAdapter == null) return true;
         else return false;
     }
 
-    public static Boolean isEnabled(NfcAdapter nfcAdapter) {
+    public static Boolean isEnabled(final Context context) {
+        @Nullable
+        final NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         if (nfcAdapter == null) return false;
         else return nfcAdapter.isEnabled();
     }
 
-    public static Boolean isNotEnabled(NfcAdapter nfcAdapter) {
+    public static Boolean isNotEnabled(final Context context) {
+        @Nullable
+        final NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
         if (nfcAdapter == null) return true;
         else return !nfcAdapter.isEnabled();
     }
 
-    public static Boolean isSupportedAndEnabled(NfcAdapter nfcAdapter) {
-        return isSupported(nfcAdapter) && isEnabled(nfcAdapter);
+    public static Boolean isSupportedAndEnabled(final Context context) {
+        return isSupported(context) && isEnabled(context);
     }
 }

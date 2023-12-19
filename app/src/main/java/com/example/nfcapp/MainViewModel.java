@@ -16,6 +16,7 @@ import android.nfc.tech.NfcV;
 import android.os.Parcelable;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -31,41 +32,48 @@ public class MainViewModel extends AndroidViewModel {
     private final static String TAG = MainViewModel.class.getSimpleName();
     private final static String prefix = "android.nfc.tech.";
 
-    public MainViewModel(Application application) {
+    private final MutableLiveData<NFCStatus> liveNFCStatus;
+    private final MutableLiveData<String> liveNFCState;
+
+    public MainViewModel(final Application application) {
         super(application);
         Log.d(TAG, "constructor");
-        liveNFCStatus = new MutableLiveData<String>();
+        liveNFCStatus = new MutableLiveData<NFCStatus>();
+        liveNFCState = new MutableLiveData<String>();
     }
     //region NFC Status Methods
-    private final MutableLiveData<String> liveNFCStatus;
-
-    public void checkNFCStatus(NfcAdapter nfcAdapter) { Log.d(TAG, "checkNFCStatus()");
-        if (NFCManager.isSupportedAndEnabled(nfcAdapter)) liveNFCStatus.setValue(
-                getApplication().getString(R.string.please_tap_at_nfc_sensor)
-        );
-        else if (NFCManager.isNotEnabled(nfcAdapter)) liveNFCStatus.setValue(
-                getApplication().getString(R.string.please_enable_your_nfc)
-        );
-        else if (NFCManager.isNotSupported(nfcAdapter)) liveNFCStatus.setValue(
-                getApplication().getString(R.string.nfc_not_supported)
-        );
+    public void checkNFCStatus() { Log.d(TAG, "checkNFCStatus()");
+        if (NFCManager.isSupportedAndEnabled(getApplication())) {
+            liveNFCStatus.setValue(NFCStatus.Tap);
+            liveNFCState.setValue(getApplication().getString(R.string.please_tap_at_nfc_sensor));
+        } else if (NFCManager.isNotEnabled(getApplication())) {
+            liveNFCStatus.setValue(NFCStatus.NotEnabled);
+            liveNFCState.setValue(getApplication().getString(R.string.please_enable_your_nfc));
+        } else if (NFCManager.isNotSupported(getApplication())) {
+            liveNFCStatus.setValue(NFCStatus.NotSupported);
+            liveNFCState.setValue(getApplication().getString(R.string.nfc_not_supported));
+        }
     }
 
-    public LiveData<String> observeNFCStatus() {
-        return liveNFCStatus;
+    public void setNFC(NFCStatus status) {
+        liveNFCStatus.setValue(status);
+    }
+
+    public LiveData<String> observeNFCState() {
+        return liveNFCState;
     }
     //endregion
     //region NFC Process Methods, list of NFC technologies detected:
     public final String[][] techList = new String[][] {
-            new String[] {
-                    NfcA.class.getName(),
-                    NfcB.class.getName(),
-                    NfcF.class.getName(),
-                    NfcV.class.getName(),
-                    IsoDep.class.getName(),
-                    MifareClassic.class.getName(),
-                    MifareUltralight.class.getName(), Ndef.class.getName()
-            }
+        new String[] {
+            NfcA.class.getName(),
+            NfcB.class.getName(),
+            NfcF.class.getName(),
+            NfcV.class.getName(),
+            IsoDep.class.getName(),
+            MifareClassic.class.getName(),
+            MifareUltralight.class.getName(), Ndef.class.getName()
+        }
     };
 
     public IntentFilter[] getIntentFilter() {
@@ -78,9 +86,9 @@ public class MainViewModel extends AndroidViewModel {
         return new IntentFilter[]{filter};
     }
 
-    public String dumpTagData(Parcelable p) { Log.d(TAG,"dumpTagData(" + p + ")");
+    public String dumpTagData(final Parcelable parcelable) { Log.d(TAG,"dumpTagData(" + parcelable + ")");
         StringBuilder sb = new StringBuilder();
-        Tag tag = (Tag) p;
+        Tag tag = (Tag) parcelable;
         byte[] id = tag.getId();
         sb.append("Tag ID (hex): ").append(getHex(id)).append("\n");
         sb.append("Tag ID (dec): ").append(getDec(id)).append("\n");
@@ -144,7 +152,7 @@ public class MainViewModel extends AndroidViewModel {
         return sb.toString();
     }
 
-    private String ByteArrayToHexString(byte [] inarray) { Log.d(ContentValues.TAG, "ByteArrayToHexString " + Arrays.toString(inarray));
+    private String ByteArrayToHexString(final byte [] inarray) { Log.d(ContentValues.TAG, "ByteArrayToHexString " + Arrays.toString(inarray));
         int i, j, in;
         String [] hex = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"};
         String out = "";
@@ -161,20 +169,20 @@ public class MainViewModel extends AndroidViewModel {
         return out;
     }
 
-    public String getByteArrayToHexString(byte [] inarray) { Log.d(TAG, "getByteArrayToHexString " + Arrays.toString(inarray));
+    public String getByteArrayToHexString(final byte [] inarray) { Log.d(TAG, "getByteArrayToHexString " + Arrays.toString(inarray));
         Log.d(ContentValues.TAG, "getByteArrayToHexString " + Arrays.toString(inarray));
         Log.d(ContentValues.TAG, "getByteArrayToHexString Return " + ByteArrayToHexString(inarray));
         return "NFC Tag\n" + ByteArrayToHexString(inarray);
     }
 
-    public String getDateTimeNow(String data) { Log.d(TAG,"getDateTime(" + data + ")");
+    public String getDateTimeNow(final String data) { Log.d(TAG,"getDateTime(" + data + ")");
         DateFormat TIME_FORMAT = SimpleDateFormat.getDateTimeInstance();
         Date now = new Date();
         Log.d(ContentValues.TAG,"getDateTimeNow() Return \n" + TIME_FORMAT.format(now) + '\n' + data);
         return TIME_FORMAT.format(now) + '\n' + data;
     }
 
-    private String getHex(byte[] bytes) { Log.d(TAG,"getHex()");
+    private String getHex(final byte[] bytes) { Log.d(TAG,"getHex()");
         StringBuilder sb = new StringBuilder();
         for (int i = bytes.length - 1; i >= 0; --i) {
             int b = bytes[i] & 0xff;
@@ -188,7 +196,7 @@ public class MainViewModel extends AndroidViewModel {
         return sb.toString();
     }
 
-    private long getDec(byte[] bytes) { Log.d(TAG,"getDec()");
+    private long getDec(final byte[] bytes) { Log.d(TAG,"getDec()");
         long result = 0;
         long factor = 1;
         for (int i = 0; i < bytes.length; ++i) {
@@ -199,7 +207,7 @@ public class MainViewModel extends AndroidViewModel {
         return result;
     }
 
-    private long getReversed(byte[] bytes) { Log.d(TAG,"getReversed()");
+    private long getReversed(final byte[] bytes) { Log.d(TAG,"getReversed()");
         long result = 0;
         long factor = 1;
         for (int i = bytes.length - 1; i >= 0; --i) {
@@ -210,7 +218,7 @@ public class MainViewModel extends AndroidViewModel {
         return result;
     }
 
-    public boolean isTagDiscovered(String action) {
+    public boolean isTagDiscovered(@Nullable final String action) {
         return action.equals(NfcAdapter.ACTION_TAG_DISCOVERED);
     }
     //endregion
