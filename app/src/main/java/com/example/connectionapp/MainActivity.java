@@ -11,9 +11,9 @@ import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import com.example.connectionapp.databinding.MainBinder;
 import io.reactivex.rxjava3.functions.Consumer;
 
@@ -115,13 +115,10 @@ public class MainActivity extends AppCompatActivity {
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (findViewById(checkedId).getId()){
-                    case R.id.radioOn:
-                        binding.getViewModel().setData("Radio Button is On of your selected Radio Group");
-                        break;
-                    case R.id.radioOff:
-                        binding.getViewModel().setData("Radio Button is Off of your selected Radio Group");
-                        break;
+                if (findViewById(checkedId).getId() == R.id.radioOn) {
+                    binding.getViewModel().setData("Radio Button is On of your selected Radio Group");
+                } else if (findViewById(checkedId).getId() == R.id.radioOff) {
+                    binding.getViewModel().setData("Radio Button is Off of your selected Radio Group");
                 }
             }
         });
@@ -214,11 +211,11 @@ public class MainActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean isFocus) {
                 if (isFocus){
                     //Toast.makeText(getBaseContext(),"On Enter Focus",Toast.LENGTH_SHORT).show();
-                    binding.seekBarSendData.setThumb(getResources().getDrawable(R.drawable.ic_seeker_thumb_selected));
+                    binding.seekBarSendData.setThumb(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_seeker_thumb_selected));
                 }
                 else {
                     //Toast.makeText(getBaseContext(),"On Leave Focus",Toast.LENGTH_SHORT).show();
-                    binding.seekBarSendData.setThumb(getResources().getDrawable(R.drawable.ic_seeker_thumb_unselected));
+                    binding.seekBarSendData.setThumb(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_seeker_thumb_unselected));
                 }
             }
         });
@@ -246,11 +243,11 @@ public class MainActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean isFocus) {
                 if (isFocus){
                     //Toast.makeText(getBaseContext(),"On Enter Focus",Toast.LENGTH_SHORT).show();
-                    binding.seekBarDiscreteSendData.setThumb(getResources().getDrawable(R.drawable.ic_lever_selected));
+                    binding.seekBarDiscreteSendData.setThumb(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_lever_selected));
                 }
                 else {
                     //Toast.makeText(getBaseContext(),"On Leave Focus",Toast.LENGTH_SHORT).show();
-                    binding.seekBarDiscreteSendData.setThumb(getResources().getDrawable(R.drawable.ic_lever_unselected));
+                    binding.seekBarDiscreteSendData.setThumb(ContextCompat.getDrawable(view.getContext(), R.drawable.ic_lever_unselected));
                 }
             }
         });
