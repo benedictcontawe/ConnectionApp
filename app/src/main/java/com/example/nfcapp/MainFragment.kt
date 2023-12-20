@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.nfcapp.databinding.FragmentBinder
 import kotlinx.coroutines.flow.collectLatest
@@ -22,7 +24,8 @@ class MainFragment : Fragment, CompoundButton.OnCheckedChangeListener {
     }
 
     private var binder : FragmentBinder? = null
-    private val viewModel : MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    //private val viewModel : MainViewModel by lazy { ViewModelProvider(requireActivity()).get(MainViewModel::class.java) }
+    private val viewModel : MainViewModel by viewModels<MainViewModel>()
 
     constructor() {
 

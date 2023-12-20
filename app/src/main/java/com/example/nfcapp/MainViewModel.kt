@@ -9,10 +9,15 @@ import android.nfc.tech.MifareUltralight
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 import kotlin.experimental.and
 
 public class MainViewModel : AndroidViewModel {

@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.nfcapp.databinding.ActivityBinder
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,7 +21,8 @@ public class MainActivity : AppCompatActivity, CompoundButton.OnCheckedChangeLis
     }
 
     private var binder : ActivityBinder? = null
-    private val viewModel : MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    //private val viewModel : MainViewModel by lazy { ViewModelProvider(this@MainActivity).get(MainViewModel::class.java) }
+    private val viewModel : MainViewModel by viewModels<MainViewModel>()
 
     constructor() {
 
