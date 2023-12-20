@@ -1,7 +1,10 @@
 package com.example.nfcapp;
 
 import android.app.Application;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
@@ -13,6 +16,7 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcB;
 import android.nfc.tech.NfcF;
 import android.nfc.tech.NfcV;
+import android.os.Build;
 import android.os.Parcelable;
 import android.util.Log;
 
@@ -64,6 +68,16 @@ public class MainViewModel extends AndroidViewModel {
     }
     //endregion
     //region NFC Process Methods, list of NFC technologies detected:
+    public PendingIntent createPendingIntent(Context context, int requestCode, Intent intent) {
+        final PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getActivity(context, requestCode, intent, 0);
+        }
+        return pendingIntent;
+    }
+
     public final String[][] techList = new String[][] {
         new String[] {
             NfcA.class.getName(),
