@@ -123,10 +123,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
             binder?.cameraRequestPermissions -> {
+                /*
                 ManifestPermission.requestPermissions(this@MainActivity,
                     ManifestPermission.cameraPermission,
                     ManifestPermission.CAMERA_PERMISSION_CODE
                 )
+                */
+                ManifestPermission.requestPermissions(requestPermissionsLauncher, ManifestPermission.cameraPermission)
             }
             binder?.videoCallRequestPermissions -> {
                 ManifestPermission.requestPermissions(this@MainActivity,
@@ -247,8 +250,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    val requestPermissionLauncher : ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+    val requestPermissionLauncher : ActivityResultLauncher<String> = registerForActivityResult( ActivityResultContracts.RequestPermission(),) { isGranted ->
+        Log.d(TAG, "requestPermissionLauncher $isGranted")
+    }
+
+    val requestPermissionsLauncher : ActivityResultLauncher<Array<String>> = registerForActivityResult( ActivityResultContracts.RequestMultiplePermissions(),) { isGranted ->
+        Log.d(TAG, "requestPermissionsLauncher $isGranted")
     }
 
     @Deprecated("Deprecated in Java")

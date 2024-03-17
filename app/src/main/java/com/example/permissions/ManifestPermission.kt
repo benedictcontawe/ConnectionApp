@@ -296,6 +296,16 @@ public object ManifestPermission {
     }
     //endregion
     //region Request Permissions Results Methods
+    fun requestPermissions(permissionResultResultLauncher : ActivityResultLauncher<String>, permission : String) {
+        Log.d(TAG,"requestPermission($permissionResultResultLauncher,$permission")
+        permissionResultResultLauncher.launch(permission)
+    }
+
+    fun requestPermissions(permissionResultResultLauncher : ActivityResultLauncher<Array<String>>, permissions : Array<String>) {
+        Log.d(TAG,"requestPermission($permissionResultResultLauncher,$permissions")
+        permissionResultResultLauncher.launch(permissions)
+    }
+
     fun requestPermissions(activity : Activity, permission : String, requestCode : Int) {
         Log.d(TAG,"requestPermissions($activity,$permission,$requestCode")
         ActivityCompat.requestPermissions(activity, arrayOf(permission),requestCode)
