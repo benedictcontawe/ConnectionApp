@@ -28,7 +28,7 @@
 
 - [App install location](https://developer.android.com/guide/topics/data/install-location)
 
-  ### Open Street Map 
+### Open Street Map 
 
 - [How to Integrate or Work with Open Street Map (OSM) in an Android App (Kotlin)](https://medium.com/@mr.appbuilder/how-to-integrate-and-work-with-open-street-map-osm-in-an-android-app-kotlin-564b38590bfe)
 
