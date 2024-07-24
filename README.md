@@ -28,6 +28,12 @@
 
 - [App install location](https://developer.android.com/guide/topics/data/install-location)
 
+  ### Open Street Map 
+
+- [How to Integrate or Work with Open Street Map (OSM) in an Android App (Kotlin)](https://medium.com/@mr.appbuilder/how-to-integrate-and-work-with-open-street-map-osm-in-an-android-app-kotlin-564b38590bfe)
+
+- [Create a map using openstreetmap with jetpack compose in Kotlin programming language for Android](https://stackoverflow.com/questions/77297775/create-a-map-using-openstreetmap-with-jetpack-compose-in-kotlin-programming-lang)
+
 ### RxJava
 
 - [Types of Subjects in RxJava](https://medium.com/@nazarivanchuk/types-of-subjects-in-rxjava-96f3a0c068e4)
